@@ -29,8 +29,8 @@ module ChessEngine
       return @coordinates
     end
 
-    def test(a)
-      p @color, @occupied_by, @coordinates
+    def print_square
+      print @coordinates
     end
   end
 end
