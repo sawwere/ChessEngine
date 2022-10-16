@@ -21,6 +21,10 @@ module ChessEngine
       return @occupied_by
     end
 
+    def set_occupied_by(figure)
+      @occupied_by = figure
+    end
+
     def get_coordinates
       return @coordinates
     end
