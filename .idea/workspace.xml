@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="acffe7a2-c75c-4b47-94d9-768b9e910cc3" name="Changes" comment="update .gemspec">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ChessEngine.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ChessEngine.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/chess_board.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/chess_board.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/figure.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/figure.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/square.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/square.rb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/ChessEngine/parser.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,17 +29,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/my_programs/ruby/lesson3&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ruby.rails.projectView.checked&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.ruby.settings.RubyModuleStructureConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "F:/my_programs/ruby/lesson3",
+    "nodejs_package_manager_path": "npm",
+    "ruby.rails.projectView.checked": "true",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.ruby.settings.RubyModuleStructureConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="F:\my_programs\ruby\ChessEngine\lib" />
@@ -70,6 +67,7 @@
       <workItem from="1665821452498" duration="2280000" />
       <workItem from="1665938382179" duration="4494000" />
       <workItem from="1665942928778" duration="1052000" />
+      <workItem from="1666292955159" duration="332000" />
     </task>
     <servers />
   </component>
@@ -93,7 +91,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ChessEngine@square.rcov" NAME="square Coverage Results" MODIFIED="1665922143784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
-    <SUITE FILE_PATH="coverage/ChessEngine@chess_board.rcov" NAME="chess_board Coverage Results" MODIFIED="1665928002353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
     <SUITE FILE_PATH="coverage/ChessEngine@ChessEngine.rcov" NAME="ChessEngine Coverage Results" MODIFIED="1665943980876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
+    <SUITE FILE_PATH="coverage/ChessEngine@chess_board.rcov" NAME="chess_board Coverage Results" MODIFIED="1665928002353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
   </component>
 </project>
