@@ -30,7 +30,7 @@ module ChessEngine
     end
 
     def print_square
-      print @coordinates
+      print !@occupied_by.nil? ? @occupied_by : "\u25A1".encode('utf-8')
     end
   end
 end

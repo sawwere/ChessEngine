@@ -27,27 +27,27 @@ module ChessEngine
     #Add figures to board at starting position
     def init_figures
       #Black player
-      @squares[0][0].set_occupied_by(Figure.new('Rook','B'))
-      @squares[0][1].set_occupied_by(Figure.new('Knight','B'))
-      @squares[0][2].set_occupied_by(Figure.new('Bishop','B'))
-      @squares[0][3].set_occupied_by(Figure.new('Queen','B'))
-      @squares[0][4].set_occupied_by(Figure.new('King','B'))
-      @squares[0][5].set_occupied_by(Figure.new('Bishop','B'))
-      @squares[0][6].set_occupied_by(Figure.new('Knight','B'))
-      @squares[0][7].set_occupied_by(Figure.new('Rook','B'))
+      @squares[0][0].set_occupied_by(Rook.new('Rook','B'))
+      @squares[0][1].set_occupied_by(Knight.new('Knight','B'))
+      @squares[0][2].set_occupied_by(Bishop.new('Bishop','B'))
+      @squares[0][3].set_occupied_by(Queen.new('Queen','B'))
+      @squares[0][4].set_occupied_by(King.new('King','B'))
+      @squares[0][5].set_occupied_by(Bishop.new('Bishop','B'))
+      @squares[0][6].set_occupied_by(Knight.new('Knight','B'))
+      @squares[0][7].set_occupied_by(Rook.new('Rook','B'))
       #Pawns
-      @squares[1].each { |sq| sq.set_occupied_by(Figure.new('Pawn','B'))}
+      @squares[1].each { |sq| sq.set_occupied_by(Pawn.new('Pawn','B'))}
       #White player
-      @squares[7][0].set_occupied_by(Figure.new('Rook','W'))
-      @squares[7][1].set_occupied_by(Figure.new('Knight','W'))
-      @squares[7][2].set_occupied_by(Figure.new('Bishop','W'))
-      @squares[7][3].set_occupied_by(Figure.new('Queen','W'))
-      @squares[7][4].set_occupied_by(Figure.new('King','W'))
-      @squares[7][5].set_occupied_by(Figure.new('Bishop','W'))
-      @squares[7][6].set_occupied_by(Figure.new('Knight','W'))
-      @squares[7][7].set_occupied_by(Figure.new('Rook','W'))
+      @squares[7][0].set_occupied_by(Rook.new('Rook','W'))
+      @squares[7][1].set_occupied_by(Knight.new('Knight','W'))
+      @squares[7][2].set_occupied_by(Bishop.new('Bishop','W'))
+      @squares[7][3].set_occupied_by(Queen.new('Queen','W'))
+      @squares[7][4].set_occupied_by(King.new('King','W'))
+      @squares[7][5].set_occupied_by(Bishop.new('Bishop','W'))
+      @squares[7][6].set_occupied_by(Knight.new('Knight','W'))
+      @squares[7][7].set_occupied_by(Rook.new('Rook','W'))
       #Pawns
-      @squares[6].each { |sq| sq.set_occupied_by(Figure.new('Pawn','W'))}
+      @squares[6].each { |sq| sq.set_occupied_by(Pawn.new('Pawn','W'))}
     end
 
     def get_square(coords)
@@ -96,6 +96,7 @@ module ChessEngine
         row.each  do |sq|
           sq.print_square
         end
+        puts
       end
     end
 
@@ -104,17 +105,24 @@ module ChessEngine
       res = Set.new
       dx = dir_x
       dy = dir_y
-      while dir_x.abs < distance and
+      while dx.abs <= distance and
+          dy.abs <= distance and
           x0 - dx >= 0 and
           x0 - dx <= SIZE - 1 and
           y0 - dy >= 0 and
-          y0 - dy <= SIZE - 1 and
-          @squares[y0 - dy][x0 - dx].get_occupied_by.nil?
+          y0 - dy <= SIZE - 1
+
+        unless @squares[y0 - dy][x0 - dx].get_occupied_by.nil?
+          if @squares[y0 - dy][x0 - dx].get_occupied_by.get_color != @squares[y0][x0].get_occupied_by.get_color
+            res.add(@squares[y0 - dy][x0 - dx])
+          end
+          break
+        end
         res.add(@squares[y0 - dy][x0 - dx])
         dx += dir_x
         dy += dir_y
       end
-      return res
+      res
     end
 
     # Return set of squares which can be accessed from the square horizontally within distance

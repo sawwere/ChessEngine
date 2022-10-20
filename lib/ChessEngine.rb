@@ -10,8 +10,8 @@ module ChessEngine
   # Your code goes here...
   
   b = ChessBoard.new(nil)
-  #b.print_board
-  s = Square.new(Colors::WHITE, Figure.new("Pawn", 'W'), {y: 4, x: 4})
+  s = Square.new(Colors::WHITE, Pawn.new("Pawn", 'W'), {y: 1, x: 1})
+  b.print_board
   ms = b.generate_diagonal(s, 4)
   puts ms.size
 end
