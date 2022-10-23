@@ -1,0 +1,11 @@
+rnbqkbnr
+ppppp□pp
+□□□□□□□□
+□□□□□p□□
+□□□□□□□□
+□□N□□□□□
+PPPPPPPP
+R□BQKBNR
+true
+true
+true

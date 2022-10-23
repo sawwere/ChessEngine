@@ -30,7 +30,7 @@ module ChessEngine
     end
 
     def print_square
-      print !@occupied_by.nil? ? @occupied_by : "\u25A1".encode('utf-8')
+      print !@occupied_by.nil? ? @occupied_by.to_s : "\u25A1".encode('utf-8')
     end
   end
 end

@@ -41,7 +41,7 @@
     &quot;last_opened_file_path&quot;: &quot;F:/my_programs/ruby/lesson3&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;ruby.rails.projectView.checked&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.ruby.settings.RubyModuleStructureConfigurable&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.ruby.settings.RubyActiveModuleSdkConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -56,6 +56,42 @@
       <command value="gem install bundler matrix" />
     </option>
   </component>
+  <component name="RunManager" selected="Ruby.ChessEngine">
+    <configuration name="ChessEngine" type="RubyRunConfigurationType" factoryName="Ruby" temporary="true">
+      <module name="ChessEngine" />
+      <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$MODULE_DIR$" />
+      <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
+      <EXTENSION ID="BundlerRunConfigurationExtension" BUNDLE_MODE="AUTO" bundleExecEnabled="true" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov" ENABLE_BRANCH_COVERAGE="true" ENABLE_FORKED_COVERAGE="true" />
+      <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/lib/ChessEngine.rb" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="chess_board" type="RubyRunConfigurationType" factoryName="Ruby" temporary="true">
+      <module name="ChessEngine" />
+      <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$MODULE_DIR$" />
+      <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
+      <EXTENSION ID="BundlerRunConfigurationExtension" BUNDLE_MODE="AUTO" bundleExecEnabled="true" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov" ENABLE_BRANCH_COVERAGE="true" ENABLE_FORKED_COVERAGE="true" />
+      <EXTENSION ID="org.jetbrains.plugins.ruby.rails.run.RailsRunConfigurationExtension" SCRATCH_USE_RAILS_RUNNER="false" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/lib/chess_board.rb" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Ruby.ChessEngine" />
+        <item itemvalue="Ruby.chess_board" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SpringUtil" SPRING_PRE_LOADER_OPTION="false" RAKE_SPRING_PRE_LOADER_OPTION="false" RAILS_SPRING_PRE_LOADER_OPTION="false" />
   <component name="TaskManager">
@@ -69,8 +105,19 @@
       <workItem from="1665241806874" duration="642000" />
       <workItem from="1665821452498" duration="2280000" />
       <workItem from="1665938382179" duration="4494000" />
-      <workItem from="1665942928778" duration="1052000" />
+      <workItem from="1665942928778" duration="1635000" />
+      <workItem from="1665989068745" duration="1395000" />
+      <workItem from="1666367507006" duration="659000" />
+      <workItem from="1666519312490" duration="15878000" />
     </task>
+    <task id="LOCAL-00001" summary="update .gemspec">
+      <created>1665944100118</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1665944100118</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -93,7 +140,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ChessEngine@square.rcov" NAME="square Coverage Results" MODIFIED="1665922143784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
-    <SUITE FILE_PATH="coverage/ChessEngine@chess_board.rcov" NAME="chess_board Coverage Results" MODIFIED="1665928002353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
-    <SUITE FILE_PATH="coverage/ChessEngine@ChessEngine.rcov" NAME="ChessEngine Coverage Results" MODIFIED="1665943980876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
+    <SUITE FILE_PATH="coverage/ChessEngine@chess_board.rcov" NAME="chess_board Coverage Results" MODIFIED="1666534469487" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
+    <SUITE FILE_PATH="coverage/ChessEngine@ChessEngine.rcov" NAME="ChessEngine Coverage Results" MODIFIED="1666548963451" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="ChessEngine" />
   </component>
 </project>
