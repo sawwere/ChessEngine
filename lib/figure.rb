@@ -9,10 +9,12 @@ module ChessEngine
       @name = FIGURES.key(self.class.name.split('::').last).dup
       @name.upcase! if @white
     end
+
     def white?
       @white
     end
-    def move(coordinates)
+
+    def generate_moves(coordinates, checks)
       #TODO переопределить для всех фигур
     end
 

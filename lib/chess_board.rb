@@ -193,5 +193,34 @@ module ChessEngine
                       union(get_accessible_squares(-1, 1, x0, y0, distance)).
                       union(get_accessible_squares(-1, -1, x0, y0, distance))
     end
+
+    def angle(x0, y0, dx, dy)
+      x_border = dx > 0 ? 8 - x0 : x0 - 1
+      y_border = dy > 0 ? 8 - y0 : y0 - 1
+      if (((dx > 0) and (x0 > x_border)) or ((dx < 0) and (x0 < x_border))) and
+        (((dy > 0) and (y0 > y_border)) or ((dy < 0) and (y0 < y_border))) and
+        @squares[y0+dy][x0+dx].get_occupied_by.white? != @squares[y0][x0].get_occupied_by.white?
+      end
+    end
+
+    def generate_angular(square)
+      res = Set.new
+      x0 = square.get_coordinates[:x]
+      y0 = square.get_coordinates[:y]
+      res = res.union(angle(x0, y0, -2,  1)).
+        union(angle(x0, y0, 2,   1)).
+        union(angle(x0, y0, -1,  2)).
+        union(angle(x0, y0, 1,   2)).
+        union(angle(x0, y0, -2, -1)).
+        union(angle(x0, y0, 2,  -1)).
+        union(angle(x0, y0, -1, -2)).
+        union(angle(x0, y0, 1,  -2))
+
+      res
+    end
+
+    def get_figures(color)
+
+    end
   end
 end
