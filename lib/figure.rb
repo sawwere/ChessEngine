@@ -14,7 +14,7 @@ module ChessEngine
       @white
     end
 
-    def generate_moves(coordinates, checks)
+    def generate_moves(coordinates, checks, next_square)
       #TODO переопределить для всех фигур
     end
 
@@ -33,6 +33,17 @@ module ChessEngine
     def initialize(white)
       super
     end
+    def generate_moves(coordinates, checks, next_square)
+      if coordinates.has_key?('x') and coordinates.has_key?('y') and checks.has_key?('white_turn') and checks.has_key?('white_castling') and checks.has_key?('black_castling') and next_square.has_key?('x') and next_square.has_key?('y')
+        if checks[:white_turn] and !checks[:white_castling]
+          return (Math.abs(coordinates[:x]-next_square[:x])==1 and(Math.abs(coordinates[:y]-next_square[:y])==2))or(Math.abs(coordinates[:x]-next_square[:x])==2 and ((Math.abs(coordinates[:y]-next_square[:y])==1)))
+        else
+
+        end
+      else
+      end
+    end
+
   end
 
   class Bishop < Figure
