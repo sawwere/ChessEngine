@@ -22,26 +22,9 @@ module ChessEngine
         (0..SIZE-1).each { |i|
           line=file.readline(chomp: true)
           (0..SIZE-1).each { |j|
-            color = true ? line[j]==line[j].upcase : false
-            case line[j].upcase
-            when 'P'
-              fg='Pawn'
-            when 'Q'
-              fg='Queen'
-            when 'K'
-              fg='King'
-            when 'R'
-              fg='Rook'
-            when 'B'
-              fg='Bishop'
-            when 'N'
-              fg='Knight'
-            when "\u25A1".encode('utf-8')
-              fg='no_figure'
-            else
-              raise 'Error reading file!'
-            end
-            @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color)) unless fg=='no_figure'
+            color = true ? line[j]==line[j].to_s.upcase : false
+            fg = FIGURES[line[j].to_s.downcase]
+            @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color)) unless fg.nil?
           }
         }
         line=file.readline(chomp: true)
@@ -144,19 +127,13 @@ module ChessEngine
       @squares = Array.new(size) { Array.new(size) }
       @squares.each_with_index  do |row,row_i|
         row.each_index  do |col_i|
-          #p sq
-          if (row_i+col_i)%2==0
-            color = Colors::WHITE
-          else
-            color = Colors::BLACK
-          end
-          @squares[row_i][col_i] = Square.new(color, nil, {y: row_i, x: col_i})
+          @squares[row_i][col_i] = Square.new(nil, {y: row_i, x: col_i})
         end
       end
     end
 
     def print_board
-      @squares.each_with_index  do |row, row_i|
+      @squares.each  do |row|
         row.each  do |sq|
           sq.print_square
         end
@@ -194,9 +171,8 @@ module ChessEngine
       res = Set.new
       x0 = square.get_coordinates[:x]
       y0 = square.get_coordinates[:y]
-      res = res.union(get_accessible_squares(0, 1, x0, y0, distance)).
-                union(get_accessible_squares(0, -1, x0, y0, distance))
-      return res
+      res.union(get_accessible_squares(0, 1, x0, y0, distance)).
+                      union(get_accessible_squares(0, -1, x0, y0, distance))
     end
 
     # Return set of squares which can be accessed from the square vertically within distance
@@ -204,20 +180,18 @@ module ChessEngine
       res = Set.new
       x0 = square.get_coordinates[:x]
       y0 = square.get_coordinates[:y]
-      res = res.union(get_accessible_squares(1, 0, x0, y0, distance)).
-                union(get_accessible_squares(-1, 0, x0, y0, distance))
-      return res
+      res.union(get_accessible_squares(1, 0, x0, y0, distance)).
+                      union(get_accessible_squares(-1, 0, x0, y0, distance))
     end
 
     def generate_diagonal(square, distance)
       res = Set.new
       x0 = square.get_coordinates[:x]
       y0 = square.get_coordinates[:y]
-      res = res.union(get_accessible_squares(1, 1, x0, y0, distance)).
-                union(get_accessible_squares(1, -1, x0, y0, distance)).
-                union(get_accessible_squares(-1, 1, x0, y0, distance)).
-                union(get_accessible_squares(-1, -1, x0, y0, distance))
-      return res
+      res.union(get_accessible_squares(1, 1, x0, y0, distance)).
+                      union(get_accessible_squares(1, -1, x0, y0, distance)).
+                      union(get_accessible_squares(-1, 1, x0, y0, distance)).
+                      union(get_accessible_squares(-1, -1, x0, y0, distance))
     end
   end
 end

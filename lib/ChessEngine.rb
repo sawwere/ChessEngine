@@ -10,7 +10,7 @@ module ChessEngine
   # Your code goes here...
   
   b = ChessBoard.new('test_reading.txt')
-  s = Square.new(Colors::WHITE, Pawn.new(true), {y: 1, x: 1})
+  s = Square.new(Pawn.new(true), {y: 1, x: 1})
   b.print_board
   b.save_board('test.txt')
   ms = b.generate_diagonal(s, 4)
