@@ -31,23 +31,17 @@ module ChessEngine
       #TODO распарсить входную сроку с командой
       # проверка правильности строки
       # return true - false
-      puts execute_move(@board[6, 1], @board[6, 3])
+      puts execute_move(@board[4, 6], @board[4, 5])
       @checks[:white_turn] = !@checks[:white_turn]
       execute_print_board
 
-      # puts execute_move(@board[4, 6], @board[4, 4])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      # execute_print_board
-      #
-      # puts execute_move(@board[5, 1], @board[5, 2])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      # execute_print_board
-      #
-      # puts @board[4,6].get_occupied_by.nil?
-      #
-      # puts execute_move(@board[3, 7], @board[4, 6])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      # execute_print_board
+      puts execute_move(@board[5, 1], @board[5, 3])
+      @checks[:white_turn] = !@checks[:white_turn]
+
+      puts execute_move(@board[3, 7], @board[7, 3])
+      @checks[:white_turn] = !@checks[:white_turn]
+
+      execute_print_board
     end
 
     def king_under_attack?
@@ -60,25 +54,24 @@ module ChessEngine
       #TODO проверка типа фигуры и может ли она переместиться в указанную клетку
       # return true - false
 
-      puts square_from.get_occupied_by
-      puts square_from.get_coordinates
+      #puts square_from.get_occupied_by
+      #puts square_from.get_coordinates
       possible_moves = square_from.get_occupied_by.generate_moves(square_from, @checks)
 
-      puts possible_moves
+      #puts possible_moves
       if possible_moves.include?(square_to)
-        from_fig = square_from.get_occupied_by
-        to_fig = square_from.get_occupied_by
+        from_fig = square_from.get_occupied_by.dup
+        to_fig = square_from.get_occupied_by.dup
 
         to = square_to.get_coordinates
-        @board[to[:x], to[:y]].set_occupied_by(@board[to[:x], to[:y]].get_occupied_by)
+        @board[to[:x], to[:y]].set_occupied_by(from_fig )
 
         from = square_from.get_coordinates
         @board[from[:x], from[:y]].set_occupied_by(nil)
 
         if king_under_attack?
-          square_to.set_occupied_by(to_fig)
-          square_from.set_occupied_by(from_fig)
-          puts "==============="
+          @board[to[:x], to[:y]].set_occupied_by(to_fig )
+          @board[from[:x], from[:y]].set_occupied_by(from_fig)
           return false
         end
         @history.append(square_from, square_to )
@@ -108,12 +101,5 @@ module ChessEngine
 
   game = ChessMatch.new('test_reading.txt')
   game.start
-  
-  # b = ChessBoard.new('test_reading.txt')
-  # s = Square.new(Pawn.new(true, self), {y: 1, x: 1})
-  # b.print_board
-  # b.save_board('test.txt')
-  # ms = b.generate_diagonal(s, 4)
-  # puts ms.size
 
 end

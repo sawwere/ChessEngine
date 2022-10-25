@@ -22,7 +22,7 @@ module ChessEngine
       @moved
     end
 
-    def generate_moves(coordinates, checks)
+    def generate_moves(init_square, checks)
       #TODO переопределить для всех фигур
       return Set.new
     end
@@ -42,7 +42,7 @@ module ChessEngine
     def initialize(white, board, moved=true)
       super
     end
-    # def generate_moves(coordinates, checks)
+    # def generate_moves(init_square, checks)
     #   if coordinates.has_key?('x') and coordinates.has_key?('y') and checks.has_key?('white_turn') and checks.has_key?('white_castling') and checks.has_key?('black_castling') and next_square.has_key?('x') and next_square.has_key?('y')
     #     if checks[:white_turn] and !checks[:white_castling]
     #       #FIXME Проект не запускается из-за этой строчки!
@@ -58,22 +58,26 @@ module ChessEngine
     def initialize(white, board, moved=true)
       super
     end
+
+    def generate_moves(init_square, checks)
+      return @board.generate_horizontal(init_square, 8).
+        union(@board.generate_vertical_up(init_square, 8)).
+        union(@board.generate_vertical_down(init_square, 8)).
+        union( @board.generate_diagonal(init_square, 8))
+    end
   end
 
   class Queen < Figure
     def initialize(white, board, moved=true)
       super
     end
-    def generate_moves(init_square, next_square, checks)
+    def generate_moves(init_square,  checks)
     moves = @board.generate_horizontal(init_square, 8).
       union(@board.generate_vertical_up(init_square, 8)).
       union(@board.generate_vertical_down(init_square, 8)).
       union( @board.generate_diagonal(init_square, 8))
 
-    if next_square in moves
-      return true
-    end
-    false
+    return  moves
     end
 
   end
@@ -83,30 +87,24 @@ module ChessEngine
       super
     end
 
-    def generate_moves(init_square, next_square, checks)
+    def generate_moves(init_square, checks)
         moves = @board.generate_horizontal(init_square, 1).
         union(@board.generate_vertical_up(init_square, 1)).
         union(@board.generate_vertical_down(init_square, 1)).
         union( @board.generate_diagonal(init_square, 1))
 
-        #  if next_square in moves
-        #  return true
-        #end
-        #false
-        #end
+        moves
+    end
 
     def castling(init_square_king,init_square_rook)
       moves1=@board.get_all_moves(not(@white))
       moves2=@board.generate_horizontal(init_square_rook, 8)
-    end
-
-    moves2.each do |i|
-      if moves2[i] in moves1
-        return false
-      else
-        return true
+      moves2.each do |i|
+        if moves1.include?(moves2[i])
+          return false
+        end
       end
-    end
+      return  true
    end
   end
 
@@ -115,39 +113,27 @@ module ChessEngine
       super
     end
 
-    def generate_moves(init_square, next_square, checks)
-      if (@white = white)
-        if (@moved=true)
-        moves = @board.generate_vertical_down(init_square, 2).
+    def generate_moves(init_square, checks)
+      if (@white)
+        if (@moved!=true)
+
+        moves = @board.generate_vertical_up(init_square, 2).
         union( @board.generate_diagonal(init_square, 1))
         else
-        moves = @board.generate_vertical_down(init_square, 1).
+        moves = @board.generate_vertical_up(init_square, 1).
         union( @board.generate_diagonal(init_square, 1))
         end
       else
-        if (@moved=true)
-          moves = @board.generate_vertical_up(init_square, 2).
+        if (@moved!=true)
+          moves = @board.generate_vertical_down(init_square, 2).
             union( @board.generate_diagonal(init_square, 1))
         else
-          moves = @board.generate_vertical_up(init_square, 1).
+          moves = @board.generate_vertical_down(init_square, 1).
             union( @board.generate_diagonal(init_square, 1))
         end
       end
-
-
-      if next_square in moves
-        return true
-      end
-      false
+      return moves
     end
-
-
-    #def generate_moves(init_square, checks)
-    #  return @board.generate_horizontal(init_square, 2).
-    #    union(@board.generate_vertical_up(init_square, 2)).
-    #    union(@board.generate_vertical_down(init_square, 2)).
-    #    union( @board.generate_diagonal(init_square, 2))
-    #end
-
   end
+
 end

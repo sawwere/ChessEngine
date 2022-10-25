@@ -78,7 +78,7 @@ module ChessEngine
           color = line[j].eql?(line[j].to_s.upcase)
           moved = !line[j].eql?(START_POSITIONS[i][j])
           fg = FIGURES[line[j].to_s.downcase]
-          @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color,moved)) unless fg.nil?
+          @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color,self,moved)) unless fg.nil?
         }
       end
     end
@@ -148,7 +148,7 @@ module ChessEngine
     end
 
     # Cycle through the board checking squares
-    def get_accessible_squares(dir_y, dir_x, y0, x0, distance)
+    def get_accessible_squares(dir_y, dir_x, x0, y0, distance)
       res = Set.new
       dx = dir_x
       dy = dir_y
@@ -161,11 +161,11 @@ module ChessEngine
 
         unless @squares[y0 - dy][x0 - dx].get_occupied_by.nil?
           if @squares[y0 - dy][x0 - dx].get_occupied_by.white? != @squares[y0][x0].get_occupied_by.white?
-            res.add(@squares[y0 - dy][x0 - dx])
+            res = res.add(@squares[y0 - dy][x0 - dx])
           end
           break
         end
-        res.add(@squares[y0 - dy][x0 - dx])
+        res = res.add(@squares[y0 - dy][x0 - dx])
         dx += dir_x
         dy += dir_y
       end
@@ -186,7 +186,8 @@ module ChessEngine
       res = Set.new
       x0 = square.get_coordinates[:x]
       y0 = square.get_coordinates[:y]
-      get_accessible_squares(1, 0, x0, y0, distance)
+      res = get_accessible_squares(1, 0, x0, y0, distance)
+      res
     end
 
     def generate_vertical_down(square, distance)
@@ -242,8 +243,31 @@ module ChessEngine
       res
     end
 
-    def get_all_moves (color)
+    def [](x, y)
+      @squares[y][x]
+    end
 
+    def get_king(color)
+      @squares.each  do |row|
+        row.each  do |sq|
+          if !sq.get_occupied_by.nil? and sq.get_occupied_by.white? == color and sq.get_occupied_by.to_s.upcase == 'K'
+            return sq
+          end
+        end
+      end
+    end
+
+    #Возвращает все возможные ходы всех фигур цвета color
+    def get_all_moves(color, checks)
+      res = Set.new
+      @squares.each  do |row|
+        row.each  do |sq|
+          if !sq.get_occupied_by.nil? and sq.get_occupied_by.white? == color
+            res = res.union(sq.get_occupied_by.generate_moves(sq, checks))
+          end
+        end
+      end
+      res
     end
 
   end
