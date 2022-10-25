@@ -6,6 +6,7 @@ ppppp□pp
 □□N□□□□□
 PPPPPPPP
 R□BQKBNR
-true
-true
-true
+white_turn = true
+white_castling = true
+black_castling = true
+last_turn = 

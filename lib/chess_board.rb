@@ -3,53 +3,52 @@ require 'figure'
 require 'set'
 
 module ChessEngine
+  BOARD_SIZE = 8
+  START_POSITIONS= %w[rnbqkbnr
+                      pppppppp
+                      ........
+                      ........
+                      ........
+                      ........
+                      PPPPPPPP
+                      RNBQKBNR]
   class ChessBoard
-    SIZE = 8
     def initialize(filename)
       #s = Square.new(Colors::WHITE, nil, nil)
       #p s
       @white_turn=true
       @white_castling=true
       @black_castling=true
-      create_board(SIZE)
+      @last_turn=''
+      create_board(BOARD_SIZE)
       load_board(filename) unless filename.nil?
-      init_figures if filename.nil?
+      init_figures(START_POSITIONS) if filename.nil?
     end
-
+    def string_to_bool(str)
+      true if str=='true'
+      false if str=='false'
+    end
     #Load board data from file
     def load_board(filename)
       File.open(filename, 'r') do |file|
-        (0..SIZE-1).each { |i|
-          line=file.readline(chomp: true)
-          (0..SIZE-1).each { |j|
-            color = true ? line[j]==line[j].to_s.upcase : false
-            fg = FIGURES[line[j].to_s.downcase]
-            @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color)) unless fg.nil?
-          }
-        }
-        line=file.readline(chomp: true)
-        if line=='true'
-          @white_turn=true
-        elsif line=='false'
-          @white_turn=false
-        else
-          raise 'Error reading file!'
-        end
-        line=file.readline(chomp: true)
-        if line=='true'
-          @white_castling=true
-        elsif line=='false'
-          @white_castling=false
-        else
-          raise 'Error reading file!'
-        end
-        line=file.readline(chomp: true)
-        if line=='true'
-          @black_castling=true
-        elsif line=='false'
-          @black_castling=false
-        else
-          raise 'Error reading file!'
+        lines=Array.new
+        (0..BOARD_SIZE-1).each { lines.push(file.readline(chomp: true)) }
+        init_figures(lines)
+        lines=file.readlines(chomp: true)
+        lines.each do |line|
+          case line.split(' = ').first
+          when 'white_turn'
+            b=string_to_bool(line.split(' = ').last)
+            @white_turn=b unless b.nil?
+          when 'white_castling'
+            b=string_to_bool(line.split(' = ').last)
+            @white_castling=b unless b.nil?
+          when 'black_castling'
+            b=string_to_bool(line.split(' = ').last)
+            @black_castling=b unless b.nil?
+          else
+            # type code here
+          end
         end
       end
     end
@@ -65,36 +64,23 @@ module ChessEngine
           end
           file.write(line,"\n")
         end
-        file.write(@white_turn.to_s,"\n")
-        file.write(@white_castling.to_s,"\n")
-        file.write(@black_castling.to_s,"\n")
+        file.write("white_turn = #{@white_turn.to_s}","\n")
+        file.write("white_castling = #{@white_castling.to_s}","\n")
+        file.write("black_castling = #{@black_castling.to_s}","\n")
+        file.write("last_turn = #{@last_turn.to_s}","\n")
       end
     end
 
     #Add figures to board at starting position
-    def init_figures
-      #Black player
-      @squares[0][0].set_occupied_by(Rook.new(false))
-      @squares[0][1].set_occupied_by(Knight.new(false))
-      @squares[0][2].set_occupied_by(Bishop.new(false))
-      @squares[0][3].set_occupied_by(Queen.new(false))
-      @squares[0][4].set_occupied_by(King.new(false))
-      @squares[0][5].set_occupied_by(Bishop.new(false))
-      @squares[0][6].set_occupied_by(Knight.new(false))
-      @squares[0][7].set_occupied_by(Rook.new(false))
-      #Pawns
-      @squares[1].each { |sq| sq.set_occupied_by(Pawn.new(false))}
-      #White player
-      @squares[7][0].set_occupied_by(Rook.new(true))
-      @squares[7][1].set_occupied_by(Knight.new(true))
-      @squares[7][2].set_occupied_by(Bishop.new(true))
-      @squares[7][3].set_occupied_by(Queen.new(true))
-      @squares[7][4].set_occupied_by(King.new(true))
-      @squares[7][5].set_occupied_by(Bishop.new(true))
-      @squares[7][6].set_occupied_by(Knight.new(true))
-      @squares[7][7].set_occupied_by(Rook.new(true))
-      #Pawns
-      @squares[6].each { |sq| sq.set_occupied_by(Pawn.new(true))}
+    def init_figures(lines)
+      lines.each_with_index do |line, i|
+        (0..BOARD_SIZE-1).each { |j|
+          color = line[j].eql?(line[j].to_s.upcase)
+          moved = !line[j].eql?(START_POSITIONS[i][j])
+          fg = FIGURES[line[j].to_s.downcase]
+          @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color,moved)) unless fg.nil?
+        }
+      end
     end
 
     def get_square(coords)
@@ -106,7 +92,7 @@ module ChessEngine
       else
         return nil
       end
-      if x>=0 and x<SIZE and y>=0 and y<SIZE
+      if x>=0 and x<BOARD_SIZE and y>=0 and y<BOARD_SIZE
         @squares[y][x]
       else
         nil
@@ -131,14 +117,34 @@ module ChessEngine
         end
       end
     end
-
+    def get_positions
+      lines = Array.new
+      @squares.each_with_index do |row|
+        s=''
+        row.each  do |sq|
+          s+=sq.get_symbol
+        end
+        lines.push(s)
+      end
+      lines
+    end
+    def get_positions_difference(positions)
+      res=Hash.new
+      (0..BOARD_SIZE-1).each do |y|
+        (0..BOARD_SIZE-1).each do |x|
+          res[[x,y]]=@squares[y][x].get_symbol unless positions[y][x].eql?(@squares[y][x].get_symbol)
+        end
+      end
+      res
+    end
     def print_board
-      @squares.each  do |row|
+      @squares.each_with_index do |row, row_i|
         row.each  do |sq|
           sq.print_square
         end
-        puts
+        puts "| #{row_i+1}"
       end
+      puts ' -  -  -  -  -  -  -  -  ',' a  b  c  d  e  f  g  h '
     end
 
     # Cycle through the board checking squares
@@ -149,9 +155,9 @@ module ChessEngine
       while dx.abs <= distance and
           dy.abs <= distance and
           x0 - dx >= 0 and
-          x0 - dx <= SIZE - 1 and
+          x0 - dx <= BOARD_SIZE - 1 and
           y0 - dy >= 0 and
-          y0 - dy <= SIZE - 1
+          y0 - dy <= BOARD_SIZE - 1
 
         unless @squares[y0 - dy][x0 - dx].get_occupied_by.nil?
           if @squares[y0 - dy][x0 - dx].get_occupied_by.white? != @squares[y0][x0].get_occupied_by.white?
@@ -220,7 +226,14 @@ module ChessEngine
     end
 
     def get_figures(color)
-
+      res=Set.new
+      @squares.each_with_index  do |row,row_i|
+        row.each_index  do |col_i|
+          fg=@squares[row_i][col_i].get_occupied_by
+          res.add(fg) if not fg.nil? and fg.white? == color
+        end
+      end
+      res
     end
   end
 end

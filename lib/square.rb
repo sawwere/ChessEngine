@@ -19,8 +19,12 @@ module ChessEngine
       @coordinates
     end
 
+    def get_symbol
+      !@occupied_by.nil? ? @occupied_by.to_s : '.'#"\u25A1".encode('utf-8')
+    end
+
     def print_square
-      print !@occupied_by.nil? ? @occupied_by.to_s : "\u25A1".encode('utf-8')
+      print " #{get_symbol} "
     end
   end
 end

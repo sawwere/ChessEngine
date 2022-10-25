@@ -49,18 +49,19 @@ module ChessEngine
       @board.save_board(filename)
       #TODO сохранить историю ходов
     end
-
-
   end
 
-  game = ChessMatch.new('test_reading.txt')
-  game.start
+  #game = ChessMatch.new('test_reading.txt')
+  #game.start
   
   b = ChessBoard.new('test_reading.txt')
   s = Square.new(Pawn.new(true), {y: 1, x: 1})
   b.print_board
   b.save_board('test.txt')
+  puts b.get_square({x: 2, y: 6}).get_occupied_by.get_moved
+  puts b.get_square({x: 2, y: 5}).get_occupied_by.get_moved
   ms = b.generate_diagonal(s, 4)
   puts ms.size
+  puts b.get_positions_difference(START_POSITIONS)
 
 end
