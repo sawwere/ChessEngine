@@ -45,7 +45,7 @@ module ChessEngine
       elsif move.include? '-'
         is_quiet_move = true
         from_cell,to_cell = split_move(move,'-')
-        if from_cell.length != 2 or to_cell.length != 2
+        if check_input(from_cell,to_cell,horizontal)
           p 'Неправильно введён ход, попробуйте ещё раз'
           return false
         end
@@ -54,7 +54,7 @@ module ChessEngine
       elsif move.include? 'x'
         is_quiet_move = false
         from_cell,to_cell = split_move(move,'x')
-        if from_cell.length != 2 or to_cell.length != 2
+        if check_input(from_cell,to_cell,horizontal)
           p 'Неправильно введён ход, попробуйте ещё раз'
           return false
         end
@@ -62,6 +62,7 @@ module ChessEngine
         p 'not quiet_move is done'
       else
         p 'Неправильно введён ход, попробуйте ещё раз'
+        return false
       end
       # проверка правильности строки
       # return true - false
@@ -70,6 +71,10 @@ module ChessEngine
       execute_print_board
 
       return true
+    end
+
+    def check_input(from_cell,to_cell,horizontal)
+      return (from_cell.length != 2 or to_cell.length != 2 or horizontal.index(from_cell[0]) == nil or horizontal.index(to_cell[0]) == nil or from_cell[1].to_i < 0 or from_cell[1].to_i > 8 or to_cell[1].to_i < 0 or to_cell[1].to_i > 8)
     end
 
     def split_move(move,char)
