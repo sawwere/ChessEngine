@@ -14,8 +14,6 @@ module ChessEngine
                       RNBQKBNR]
   class ChessBoard
     def initialize(filename)
-      #s = Square.new(Colors::WHITE, nil, nil)
-      #p s
       @white_turn=true
       @white_castling=true
       @black_castling=true
@@ -80,22 +78,6 @@ module ChessEngine
           fg = FIGURES[line[j].to_s.downcase]
           @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color,self,moved)) unless fg.nil?
         }
-      end
-    end
-
-    def get_square(coords)
-      case coords
-      when Array
-        x,y = coords
-      when Hash
-        x,y = coords.values
-      else
-        return nil
-      end
-      if x>=0 and x<BOARD_SIZE and y>=0 and y<BOARD_SIZE
-        @squares[y][x]
-      else
-        nil
       end
     end
 
@@ -244,7 +226,10 @@ module ChessEngine
     end
 
     def [](x, y)
-      @squares[y][x]
+      if x>=0 and x<BOARD_SIZE and y>=0 and y<BOARD_SIZE
+        return  @squares[y][x]
+      end
+      raise IndexError
     end
 
     def get_king(color)
@@ -268,6 +253,47 @@ module ChessEngine
         end
       end
       res
+    end
+
+    def king_under_attack?(color, checks)
+      king_square = get_king(checks[:white_turn])
+      enemy_attack = get_all_moves(!checks[:white_turn], checks)
+      enemy_attack.include?(king_square)
+    end
+
+    def mate_or_draw?(checks)
+      if get_all_moves(checks[:white_turn], checks).size == 0
+        if checks[:white_turn]
+          puts "Ничья"
+        else
+          puts "Мат" + (checks[:white_turn] ? "белым" : "черным")
+        end
+        return true
+      end
+      false
+    end
+
+    def check?(square_from, square_to, checks)
+      possible_moves = square_from.get_occupied_by.generate_moves(square_from, checks)
+      if possible_moves.include?(square_to)
+        from_fig = square_from.get_occupied_by.dup
+        to_fig = square_from.get_occupied_by.dup
+
+        to = square_to.get_coordinates
+        @squares[to[:y]][to[:x]].set_occupied_by(from_fig )
+        from = square_from.get_coordinates
+        @squares[from[:y]][from[:x]].set_occupied_by(nil)
+
+        if king_under_attack?(checks[:white_turn], checks)
+          @squares[to[:y]][to[:x]].set_occupied_by(to_fig )
+          @squares[from[:y]][from[:x]].set_occupied_by(from_fig)
+          puts "Король под ударом"
+          return true
+        end
+        return false
+      end
+      puts "Нет доступных ходов для этой фигуры"
+      true
     end
 
   end

@@ -14,7 +14,7 @@ module ChessEngine
       @board = ChessBoard.new(filename)
       @history = Array.new
       #TODO добавить необходимые флаги
-      @checks = { white_turn: true, white_castling: true, black_castling: true }
+      @checks = { white_turn: true, white_castling: true, black_castling: true, white_check: false , black_check: false }
       @whites = @board.get_figures(true )
       @blacks = @board.get_figures(false )
     end
@@ -30,10 +30,10 @@ module ChessEngine
           else
         self.next(input)
         end
+
+        break
       end
-
     end
-
 
     def next(string)
       horizontal = 'abcdefgh'
@@ -64,13 +64,27 @@ module ChessEngine
         p 'Неправильно введён ход, попробуйте ещё раз'
         return false
       end
-      # проверка правильности строки
-      # return true - false
-
-      @checks[:white_turn] = !@checks[:white_turn]
-      execute_print_board
-
-      return true
+      #TODO НЕ УДАЛЯТЬ ПОКА НЕТ ТЕСТОВ
+      #
+      # puts execute_move(@board[4, 6], @board[4, 5])
+      # @checks[:white_turn] = !@checks[:white_turn]
+      # execute_print_board
+      #
+      # puts execute_move(@board[5, 1], @board[5, 3])
+      # @checks[:white_turn] = !@checks[:white_turn]
+      #
+      # puts execute_move(@board[3, 7], @board[7, 3])
+      # @checks[:white_turn] = !@checks[:white_turn]
+      #
+      # puts execute_move(@board[6, 1], @board[6, 2])
+      # @checks[:white_turn] = !@checks[:white_turn]
+      #
+      # puts execute_move(@board[4, 5], @board[4, 4])
+      # @checks[:white_turn] = !@checks[:white_turn]
+      #
+      # puts execute_move(@board[5, 3], @board[4, 4])
+      # @checks[:white_turn] = !@checks[:white_turn]
+      # execute_print_board
     end
 
     def check_input(from_cell,to_cell,horizontal)
@@ -83,45 +97,12 @@ module ChessEngine
       return from_cell,to_cell
     end
 
-    def king_under_attack?
-      king_square = @board.get_king(@checks[:white_turn])
-      enemy_attack = @board.get_all_moves(!@checks[:white_turn], @checks)
-      enemy_attack.include?(king_square)
-    end
-
     private def execute_move(square_from, square_to)
-      #TODO проверка типа фигуры и может ли она переместиться в указанную клетку
-      # return true - false
-
-      #puts square_from.get_occupied_by
-      #puts square_from.get_coordinates
-      possible_moves = square_from.get_occupied_by.generate_moves(square_from, @checks)
-
-      #puts possible_moves
-      if possible_moves.include?(square_to)
-        from_fig = square_from.get_occupied_by.dup
-        to_fig = square_from.get_occupied_by.dup
-
-        to = square_to.get_coordinates
-        @board[to[:x], to[:y]].set_occupied_by(from_fig )
-
-        from = square_from.get_coordinates
-        @board[from[:x], from[:y]].set_occupied_by(nil)
-
-        if king_under_attack?
-          @board[to[:x], to[:y]].set_occupied_by(to_fig )
-          @board[from[:x], from[:y]].set_occupied_by(from_fig)
-          return false
-        end
-        @history.append(square_from, square_to )
-        return true
-
+      if @board.mate_or_draw?(@checks)
+        return false
       end
-      false
+      !@board.check?(square_from, square_to, @checks)
     end
-
-
-
 
     private def execute_print_board
       @board.print_board
