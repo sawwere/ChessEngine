@@ -21,27 +21,61 @@ module ChessEngine
 
     def start
       while true
-        self.next(0)
-        break
+        puts 'пожалуйста введите ход'
+        input = gets.chomp
+        if input == '/exit'
+          break
+        elsif input == '/print'
+          execute_print_board
+          else
+        self.next(input)
+        end
       end
 
     end
 
+
     def next(string)
-      #TODO распарсить входную сроку с командой
+      horizontal = 'abcdefgh'
+      #current_move = string.split('.').first
+      move = string.split('.').last
+      if  move == '0-0-0' or move == '0-0'
+        #TODO Добавить рокировку
+        p 'castling is done'
+      elsif move.include? '-'
+        is_quiet_move = true
+        from_cell,to_cell = split_move(move,'-')
+        if from_cell.length != 2 or to_cell.length != 2
+          p 'Неправильно введён ход, попробуйте ещё раз'
+          return false
+        end
+        puts execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
+        p 'quiet_move is done'
+      elsif move.include? 'x'
+        is_quiet_move = false
+        from_cell,to_cell = split_move(move,'x')
+        if from_cell.length != 2 or to_cell.length != 2
+          p 'Неправильно введён ход, попробуйте ещё раз'
+          return false
+        end
+        puts execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
+        p 'not quiet_move is done'
+      else
+        p 'Неправильно введён ход, попробуйте ещё раз'
+      end
       # проверка правильности строки
       # return true - false
-      puts execute_move(@board[4, 6], @board[4, 5])
+
       @checks[:white_turn] = !@checks[:white_turn]
       execute_print_board
 
-      puts execute_move(@board[5, 1], @board[5, 3])
-      @checks[:white_turn] = !@checks[:white_turn]
+      return true
+    end
 
-      puts execute_move(@board[3, 7], @board[7, 3])
-      @checks[:white_turn] = !@checks[:white_turn]
-
-      execute_print_board
+    def split_move(move,char)
+      from_cell = move.split(char).first
+      to_cell = move.split(char).last
+      return from_cell,to_cell
     end
 
     def king_under_attack?
