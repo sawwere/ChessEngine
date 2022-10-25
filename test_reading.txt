@@ -1,11 +1,11 @@
 rnbqkbnr
-ppppp□pp
+pppppppp
 □□□□□□□□
-□□□□□p□□
 □□□□□□□□
-□□N□□□□□
+□□□□□□□□
+□□□□□□□□
 PPPPPPPP
-R□BQKBNR
+RNBQKBNR
 true
 true
 true
