@@ -64,12 +64,50 @@ module ChessEngine
     def initialize(white, board, moved=true)
       super
     end
+    def generate_moves(init_square, next_square, checks)
+    moves = @board.generate_horizontal(init_square, 8).
+      union(@board.generate_vertical_up(init_square, 8)).
+      union(@board.generate_vertical_down(init_square, 8)).
+      union( @board.generate_diagonal(init_square, 8))
+
+    if next_square in moves
+      return true
+    end
+    false
+    end
+
   end
 
   class King < Figure
     def initialize(white, board, moved=true)
       super
     end
+
+    def generate_moves(init_square, next_square, checks)
+        moves = @board.generate_horizontal(init_square, 1).
+        union(@board.generate_vertical_up(init_square, 1)).
+        union(@board.generate_vertical_down(init_square, 1)).
+        union( @board.generate_diagonal(init_square, 1))
+
+        #  if next_square in moves
+        #  return true
+        #end
+        #false
+        #end
+
+    def castling(init_square_king,init_square_rook)
+      moves1=@board.get_all_moves(not(@white))
+      moves2=@board.generate_horizontal(init_square_rook, 8)
+    end
+
+    moves2.each do |i|
+      if moves2[i] in moves1
+        return false
+      else
+        return true
+      end
+    end
+   end
   end
 
   class Pawn < Figure
@@ -77,11 +115,39 @@ module ChessEngine
       super
     end
 
-    def generate_moves(init_square, checks)
-      return @board.generate_horizontal(init_square, 2).
-        union(@board.generate_vertical_up(init_square, 2)).
-        union(@board.generate_vertical_down(init_square, 2)).
-        union( @board.generate_diagonal(init_square, 2))
+    def generate_moves(init_square, next_square, checks)
+      if (@white = white)
+        if (@moved=true)
+        moves = @board.generate_vertical_down(init_square, 2).
+        union( @board.generate_diagonal(init_square, 1))
+        else
+        moves = @board.generate_vertical_down(init_square, 1).
+        union( @board.generate_diagonal(init_square, 1))
+        end
+      else
+        if (@moved=true)
+          moves = @board.generate_vertical_up(init_square, 2).
+            union( @board.generate_diagonal(init_square, 1))
+        else
+          moves = @board.generate_vertical_up(init_square, 1).
+            union( @board.generate_diagonal(init_square, 1))
+        end
+      end
+
+
+      if next_square in moves
+        return true
+      end
+      false
     end
+
+
+    #def generate_moves(init_square, checks)
+    #  return @board.generate_horizontal(init_square, 2).
+    #    union(@board.generate_vertical_up(init_square, 2)).
+    #    union(@board.generate_vertical_down(init_square, 2)).
+    #    union( @board.generate_diagonal(init_square, 2))
+    #end
+
   end
 end

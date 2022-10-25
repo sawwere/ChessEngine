@@ -78,7 +78,7 @@ module ChessEngine
           color = line[j].eql?(line[j].to_s.upcase)
           moved = !line[j].eql?(START_POSITIONS[i][j])
           fg = FIGURES[line[j].to_s.downcase]
-          @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color, self, moved)) unless fg.nil?
+          @squares[i][j].set_occupied_by(ChessEngine::const_get(fg).new(color,moved)) unless fg.nil?
         }
       end
     end
@@ -117,7 +117,6 @@ module ChessEngine
         end
       end
     end
-
     def get_positions
       lines = Array.new
       @squares.each_with_index do |row|
@@ -129,7 +128,6 @@ module ChessEngine
       end
       lines
     end
-
     def get_positions_difference(positions)
       res=Hash.new
       (0..BOARD_SIZE-1).each do |y|
@@ -150,7 +148,7 @@ module ChessEngine
     end
 
     # Cycle through the board checking squares
-    def get_accessible_squares(dir_y, dir_x, x0, y0, distance)
+    def get_accessible_squares(dir_y, dir_x, y0, x0, distance)
       res = Set.new
       dx = dir_x
       dy = dir_y
@@ -185,13 +183,14 @@ module ChessEngine
 
     # Return set of squares which can be accessed from the square vertically within distance
     def generate_vertical_up(square, distance)
+      res = Set.new
       x0 = square.get_coordinates[:x]
       y0 = square.get_coordinates[:y]
       get_accessible_squares(1, 0, x0, y0, distance)
-
     end
 
     def generate_vertical_down(square, distance)
+      res = Set.new
       x0 = square.get_coordinates[:x]
       y0 = square.get_coordinates[:y]
       get_accessible_squares(-1, 0, x0, y0, distance)
@@ -233,42 +232,18 @@ module ChessEngine
     end
 
     def get_figures(color)
-      res = Set.new
-      @squares.each  do |row|
-        row.each  do |sq|
-          if !sq.get_occupied_by.nil? and sq.get_occupied_by.white? == color
-            res = res.add(sq.get_occupied_by)
-          end
+      res=Set.new
+      @squares.each_with_index  do |row,row_i|
+        row.each_index  do |col_i|
+          fg=@squares[row_i][col_i].get_occupied_by
+          res.add(fg) if not fg.nil? and fg.white? == color
         end
       end
       res
     end
 
-    def [](x, y)
-      @squares[y][x]
-    end
+    def get_all_moves (color)
 
-    def get_king(color)
-      @squares.each  do |row|
-        row.each  do |sq|
-          if !sq.get_occupied_by.nil? and sq.get_occupied_by.white? == color and sq.get_occupied_by.to_s.upcase == 'K'
-            return sq
-          end
-        end
-      end
-    end
-
-    #Возвращает все возможные ходы всех фигур цвета color
-    def get_all_moves(color, checks)
-      res = Set.new
-      @squares.each  do |row|
-        row.each  do |sq|
-          if !sq.get_occupied_by.nil? and sq.get_occupied_by.white? == color
-            res = res.union(sq.get_occupied_by.generate_moves(sq, checks))
-          end
-        end
-      end
-      res
     end
 
   end
