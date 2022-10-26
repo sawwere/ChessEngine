@@ -14,8 +14,6 @@ module ChessEngine
                       RNBQKBNR]
   class ChessBoard
     def initialize(filename, checks=nil)
-      #s = Square.new(Colors::WHITE, nil, nil)
-      #p s
       @checks=checks
       create_board(BOARD_SIZE)
       load_board(filename) unless filename.nil? or not File.file?(filename)
@@ -259,7 +257,7 @@ module ChessEngine
           end
         end
       end
-      return res
+      res
     end
 
     def king_under_attack?(color, checks)
@@ -273,12 +271,14 @@ module ChessEngine
     end
 
     #
-    def mate_or_draw?(checks)
+    def mate_or_draw?(color, checks)
       if get_all_moves(checks[:white_turn], checks).size == 0
-        if checks[:white_turn]
+        if !king_under_attack?(color, checks)
+          checks[:draw] = true
           puts "Ничья"
         else
           puts "Мат" + (checks[:white_turn] ? "белым" : "черным")
+          checks[:win] = true
         end
         return true
       end
@@ -302,19 +302,15 @@ module ChessEngine
 
     # Will moving from square_from to square_to lead to check
     def check?(square_from, square_to, checks)
-      possible_moves = square_from.get_occupied_by.generate_moves(square_from, checks)
-      if possible_moves.include?(square_to)
-        from_fig = square_from.get_occupied_by.dup
-        to_fig = square_to.get_occupied_by.dup
-        make_turn(square_from, square_to)
-        if king_under_attack?(checks[:white_turn], checks)
-          make_turn_back(square_from, square_to, from_fig, to_fig)
-          return true
-        end
+      from_fig = square_from.get_occupied_by.dup
+      to_fig = square_to.get_occupied_by.dup
+      make_turn(square_from, square_to)
+      if king_under_attack?(checks[:white_turn], checks)
         make_turn_back(square_from, square_to, from_fig, to_fig)
-        return false
+        return true
       end
-    end
-    true
+      make_turn_back(square_from, square_to, from_fig, to_fig)
+      false
+      end
   end
 end

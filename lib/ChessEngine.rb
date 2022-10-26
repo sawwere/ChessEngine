@@ -12,10 +12,10 @@ module ChessEngine
     def initialize(filename)
       @filename = filename
       #TODO добавить необходимые флаги
-      @checks = { white_turn: true, white_castling: true, black_castling: true, white_check: false , black_check: false }
+      @checks = { white_turn: true, white_castling: true, black_castling: true, draw: false , win: false }
       @board = ChessBoard.new(filename,@checks)
       @history = Array.new
-
+      @board.mate_or_draw?(@checks[:white_turn], @checks)
     end
 
     def start
@@ -74,27 +74,6 @@ module ChessEngine
         p 'Неправильно введён ход, попробуйте ещё раз'
         return false
       end
-      #TODO НЕ УДАЛЯТЬ ПОКА НЕТ ТЕСТОВ
-      #
-      # puts execute_move(@board[4, 6], @board[4, 5])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      # execute_print_board
-      #
-      # puts execute_move(@board[5, 1], @board[5, 3])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      #
-      # puts execute_move(@board[3, 7], @board[7, 3])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      #
-      # puts execute_move(@board[6, 1], @board[6, 2])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      #
-      # puts execute_move(@board[4, 5], @board[4, 4])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      #
-      # puts execute_move(@board[5, 3], @board[4, 4])
-      # @checks[:white_turn] = !@checks[:white_turn]
-      # execute_print_board
     end
 
     def check_input(from_cell,to_cell,horizontal)
@@ -108,17 +87,19 @@ module ChessEngine
     end
 
     private def execute_move(square_from, square_to)
-      if @board.mate_or_draw?(@checks) or
+      if @board.mate_or_draw?(@checks[:white_turn], @checks) or
+        !square_from.get_occupied_by.generate_moves(square_from, @checks).include?(square_to) or
         @board.check?(square_from, square_to, @checks) or
         !@board.valid_square?(square_from, @checks[:white_turn])
         return false
       end
       @board.make_turn(square_from, square_to)
       @checks[:white_turn] = !@checks[:white_turn]
+      @board.mate_or_draw?(@checks[:white_turn], @checks)
       true
     end
 
-    private def execute_print_board
+    def execute_print_board
       @board.print_board
     end
 
@@ -132,9 +113,7 @@ module ChessEngine
     end
   end
 
-  #b=ChessBoard.new('test_reading.txt')
-  #b.print_board
-  game = ChessMatch.new(nil)
+  game = ChessEngine::ChessMatch.new(nil )
   game.start
 
 end

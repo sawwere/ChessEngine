@@ -33,7 +33,7 @@ class TestChessEngine < Minitest::Test
   def test_checkmate
     game = ChessEngine::ChessMatch.new('test/boards/test_checkmate.txt')
     game.next('h3-h8')
-    assert false
+    assert game.checks(:win)
   end
   def test_draw
     game = ChessEngine::ChessMatch.new('test/boards/test_draw.txt')
