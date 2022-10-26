@@ -54,13 +54,13 @@ class TestCastling < Minitest::Test
     assert_equal(game.positions_difference(old_positions),{'e1'=>'.','a1'=>'.','d1'=>'R','c1'=>'K'})
   end
   def test_attack_between_1
-    game = ChessEngine::ChessMatch.new('test/boards/castling/test_castling_atxtack_between.txt')
+    game = ChessEngine::ChessMatch.new('test/boards/castling/test_castling_attack_between.txt')
     old_positions=game.positions
     game.next('0-0-0')
     assert_empty(game.positions_difference(old_positions))
   end
   def test_attack_between_2
-    game = ChessEngine::ChessMatch.new('test/boards/castling/test_castling_atxtack_between.txt')
+    game = ChessEngine::ChessMatch.new('test/boards/castling/test_castling_attack_between.txt')
     old_positions=game.positions
     game.next('0-0')
     assert_empty(game.positions_difference(old_positions))
@@ -118,7 +118,10 @@ class TestPawn < Minitest::Test
   def test_transformation
     game = ChessEngine::ChessMatch.new('test/boards/test_pawns.txt')
     old_positions=game.positions
-    assert(game.checks(:win))
+    game.next('a7-a8Q')
+    game.execute_print_board
+    p game.positions_difference(old_positions)
+    assert_equal(game.positions_difference(old_positions),{"a8"=>"Q", "a7"=>"."})
   end
   def test_passent
     game = ChessEngine::ChessMatch.new('test/boards/test_pawns.txt')

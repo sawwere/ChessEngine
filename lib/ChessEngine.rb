@@ -74,8 +74,7 @@ module ChessEngine
           return false
         end
         if is_transform
-          #TODO Добавить трансофрмирование фигуры
-          p 'transform done'
+          return execute_transform_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i], transform_to)
         else
           legal_move=execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
           if legal_move
@@ -100,6 +99,20 @@ module ChessEngine
       from_cell = move.split(char).first
       to_cell = move.split(char).last
       return from_cell,to_cell
+    end
+
+    private def execute_transform_move(square_from, square_to, transform_to)
+      from_fig = square_from.get_occupied_by.dup
+      to_fig = square_to.get_occupied_by.dup
+      if execute_move(square_from, square_to)
+        fig = square_to.get_occupied_by
+        if (square_to.get_coordinates[:y] == 0 and fig.white?) or (square_to.get_coordinates[:y] == 7 and !fig.white?)
+          square_to.set_occupied_by(ChessEngine::const_get(FIGURES[transform_to.downcase]).new(!@checks[:white_turn],self,true ))
+          return true
+        end
+        @board.make_turn_back(square_from, square_to, from_fig, to_fig)
+        false
+      end
     end
 
     private def execute_move(square_from, square_to)
@@ -130,7 +143,7 @@ module ChessEngine
     end
   end
 
-   game = ChessEngine::ChessMatch.new(nil )
-   game.start
+  #game = ChessEngine::ChessMatch.new(nil )
+  #game.start
 
 end

@@ -312,7 +312,7 @@ module ChessEngine
       @checks[:last_turn]=[from,to]
     end
 
-    private def make_turn_back(square_from, square_to, from_fig, to_fig)
+    def make_turn_back(square_from, square_to, from_fig, to_fig)
       if @passent_squares.include?(square_to)
         #TODO
       end
