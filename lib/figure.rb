@@ -38,6 +38,12 @@ module ChessEngine
     def initialize(white, board, moved=true)
       super
     end
+    def generate_moves(init_square, checks)
+
+      return @board.generate_horizontal(init_square, 8).
+        union(@board.generate_vertical_up(init_square, 8)).
+        union(@board.generate_vertical_down(init_square, 8))
+    end
   end
 
   class Knight < Figure
@@ -55,10 +61,7 @@ module ChessEngine
     end
 
     def generate_moves(init_square, checks)
-      return @board.generate_horizontal(init_square, 8).
-        union(@board.generate_vertical_up(init_square, 8)).
-        union(@board.generate_vertical_down(init_square, 8)).
-        union( @board.generate_diagonal(init_square, 8))
+      return @board.generate_diagonal(init_square, 8)
     end
   end
 
