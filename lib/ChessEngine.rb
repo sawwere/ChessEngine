@@ -57,6 +57,10 @@ module ChessEngine
       elsif move.include? '-'
         is_quiet_move = true
         from_cell,to_cell = split_move(move,'-')
+        if from_cell == to_cell
+          p 'Неправильно введён ход, попробуйте ещё раз'
+          return false
+        end
         if to_cell.length == 3 and to_cell[2] == to_cell[2].upcase
           is_transform = true
           transform_to = to_cell[2]
@@ -116,7 +120,7 @@ module ChessEngine
     end
   end
 
-  #game = ChessEngine::ChessMatch.new(nil )
-  #game.start
+  game = ChessEngine::ChessMatch.new(nil )
+  game.start
 
 end
