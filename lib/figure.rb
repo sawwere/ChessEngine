@@ -61,7 +61,7 @@ module ChessEngine
     end
 
     def generate_moves(init_square, checks)
-      return @board.generate_diagonal(init_square, 8)
+        @board.generate_diagonal(init_square, 8)
     end
   end
 
@@ -74,7 +74,6 @@ module ChessEngine
       union(@board.generate_vertical_up(init_square, 8)).
       union(@board.generate_vertical_down(init_square, 8)).
       union( @board.generate_diagonal(init_square, 8))
-
     return  moves
     end
 
@@ -112,25 +111,32 @@ module ChessEngine
     end
 
     def generate_moves(init_square, checks)
-      if (@white)
-        if (@moved!=true)
+      moves=Set.new
+      dir_y = 1
+      dir_y =-1 unless white?
 
-        moves = @board.generate_vertical_up(init_square, 2).
-        union( @board.generate_diagonal(init_square, 1))
-        else
-        moves = @board.generate_vertical_up(init_square, 1).
-        union( @board.generate_diagonal(init_square, 1))
-        end
-      else
-        if (@moved!=true)
-          moves = @board.generate_vertical_down(init_square, 2).
-            union( @board.generate_diagonal(init_square, 1))
-        else
-          moves = @board.generate_vertical_down(init_square, 1).
-            union( @board.generate_diagonal(init_square, 1))
+      x = init_square.get_coordinates[:x]
+      y = init_square.get_coordinates[:y]
+
+      #Default attack
+      sq = @board[x-1,y-dir_y]
+      #Passent
+      moves.add(sq) if (not sq.nil?) and (not sq.get_occupied_by.nil?) and (not sq.get_occupied_by.white?.eql?(white?))
+      sq = @board[x+1,y-dir_y]
+      #Passent
+      moves.add(sq) if (not sq.nil?) and (not sq.get_occupied_by.nil?) and (not sq.get_occupied_by.white?.eql?(white?))
+
+      #Default move
+      sq = @board[x,y-dir_y]
+      if (not sq.nil?) and sq.get_occupied_by.nil?
+        moves.add(sq)
+        unless @moved
+          sq = @board[x, y - 2 * dir_y]
+          moves.add(sq) if (not sq.nil?) and sq.get_occupied_by.nil?
         end
       end
-      return moves
+
+      moves
     end
   end
 
