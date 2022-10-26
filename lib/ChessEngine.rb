@@ -11,8 +11,7 @@ module ChessEngine
   class  ChessMatch
     def initialize(filename)
       @filename = filename
-      #TODO добавить необходимые флаги
-      @checks = { white_turn: true, white_castling: true, black_castling: true, draw: false , win: false, last_turn:{from:nil,to:nil} }
+      @checks = { white_turn: true, white_castling: true, black_castling: true, draw: false , win: false, passing: nil, last_pas: false }
       @board = ChessBoard.new(filename,@checks)
       @history = Array.new
       @board.mate_or_draw?(@checks[:white_turn], @checks)
@@ -79,7 +78,6 @@ module ChessEngine
           legal_move=execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
           if legal_move
             puts legal_move
-            p 'quiet_move is done'
             @history.append(move)
           else
             puts legal_move
@@ -115,6 +113,18 @@ module ChessEngine
       end
     end
 
+    def set_passing(square_from, square_to)
+      y = square_from.get_coordinates[:y]
+      if ((y == 1 and !@checks[:white_turn]) or (y == 6 and @checks[:white_turn])) and square_to.get_occupied_by.to_s.downcase == 'p'
+        @checks[:passing] = {from: {x: square_from.get_coordinates[:x], y: square_from.get_coordinates[:y]},
+                             to: {x: square_to.get_coordinates[:x], y: square_to.get_coordinates[:y]}}
+        @checks[:last_pas] = true
+        return true
+      end
+      @checks[:last_pas] = false
+      false
+    end
+
     private def execute_move(square_from, square_to)
       if !@board.valid_square?(square_from, @checks[:white_turn]) or
         @board.mate_or_draw?(@checks[:white_turn], @checks) or
@@ -122,10 +132,21 @@ module ChessEngine
         @board.check?(square_from, square_to, @checks)
         return false
       end
+      dir_y = 1
+      dir_y =-1 unless square_from.get_occupied_by.white?
       @board.make_turn(square_from, square_to)
-      @board.passent(square_to)
-      @checks[:last_turn][:from]=square_from
-      @checks[:last_turn][:to]=square_to
+      set_passing(square_from, square_to)
+      if !@checks[:last_pas] and
+          !@checks[:passing].nil? and
+          square_to.get_occupied_by.to_s.downcase == 'p' and
+          square_to.get_coordinates[:x] == @checks[:passing][:to][:x] and
+          square_to.get_coordinates[:y] == @checks[:passing][:to][:y]-dir_y
+        x = @checks[:passing][:to][:x]
+        y = @checks[:passing][:to][:y]
+        @board[x, y].set_occupied_by(nil)
+        @checks[:passing] = nil
+
+      end
       @checks[:white_turn] = !@checks[:white_turn]
       @board.mate_or_draw?(@checks[:white_turn], @checks)
       #@history.append({from:square_from, to: square_to})

@@ -126,8 +126,11 @@ class TestPawn < Minitest::Test
   def test_passent
     game = ChessEngine::ChessMatch.new('test/boards/test_pawns.txt')
     old_positions=game.positions
+    game.execute_print_board
     game.next('d2-d4')
+    game.execute_print_board
     game.next('e4-d3')
+    game.execute_print_board
     assert_equal(game.positions_difference(old_positions),{'d2'=>'.','e4'=>'.','d3'=>'p'})
   end
   def test_move_to_one
@@ -182,7 +185,10 @@ class TestPawn < Minitest::Test
   def test_passent_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_pawns.txt')
     old_positions=game.positions
-    assert false
+    game.next('a3-a4')
+    game.next('b4-a3')
+    game.execute_print_board
+    assert_equal(game.positions_difference(old_positions), {"a4"=>"P", "a3"=>"."})
   end
 end
 class TestKnight < Minitest::Test
