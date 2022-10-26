@@ -54,8 +54,11 @@ module ChessEngine
         p 'Неправильно введён ход, попробуйте ещё раз'
         return false
       elsif  move == '0-0-0' or move == '0-0'
-        #TODO Добавить рокировку
-        p 'castling is done'
+        if castling(move.eql?('0-0-0'))
+          p 'Рокировка выполнена'
+        else
+          p 'Невозможно выполнить рокировку'
+        end
       elsif move.include? '-'
         is_quiet_move = true
         from_cell,to_cell = split_move(move,'-')
@@ -99,6 +102,46 @@ module ChessEngine
       return from_cell,to_cell
     end
 
+    def castling(long)
+      if @checks[:white_turn]
+        return false unless @checks[:white_castling]
+      else
+        return false unless @checks[:black_castling]
+      end
+      short = (long ? 0 : 1)
+      white = (@checks[:white_turn] ? 1 : 0)
+      k = @board.get_king(@checks[:white_turn])
+      return disable_castling if k.get_occupied_by.get_moved
+      r = @board[7*short,7*white]
+      return disable_castling if r.nil? or r.get_occupied_by.nil? or not FIGURES[r.get_occupied_by.to_s.downcase]=='Rook' or r.get_occupied_by.get_moved
+      return false if @board.king_under_attack?(@checks[:white_turn],@checks)
+      king = k.get_occupied_by.dup
+      rook = r.get_occupied_by.dup
+      moves = @board.brave_attack(!@checks[:white_turn],@checks)
+      if long
+        return false if not @board[1,7*white].get_occupied_by.nil? or not @board[2,7*white].get_occupied_by.nil? or not @board[3,7*white].get_occupied_by.nil?
+        return false unless (moves&[@board[1,7*white],@board[2,7*white],@board[3,7*white]]).empty?
+        @board[2,7*white].set_occupied_by(king)
+        @board[3,7*white].set_occupied_by(rook)
+      else
+        return false if not @board[5,7*white].get_occupied_by.nil? or not @board[6,7*white].get_occupied_by.nil?
+        return false unless (moves&[@board[5,7*white],@board[6,7*white]]).empty?
+        @board[6,7*white].set_occupied_by(king)
+        @board[5,7*white].set_occupied_by(rook)
+      end
+      k.set_occupied_by(nil)
+      r.set_occupied_by(nil)
+      disable_castling
+      true
+    end
+    def disable_castling
+      if @checks[:white_turn]
+        @checks[:white_castling]=false
+      else
+        @checks[:black_castling]=false
+      end
+      false
+    end
     private def execute_transform_move(square_from, square_to, transform_to)
       from_fig = square_from.get_occupied_by.dup
       to_fig = square_to.get_occupied_by.dup

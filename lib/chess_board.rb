@@ -263,7 +263,7 @@ module ChessEngine
       res
     end
 
-    private def brave_attack(color, checks)
+    def brave_attack(color, checks)
       res = Set.new
       @squares.each  do |row|
         row.each  do |sq|
