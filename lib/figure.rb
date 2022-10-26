@@ -44,17 +44,10 @@ module ChessEngine
     def initialize(white, board, moved=true)
       super
     end
-    # def generate_moves(init_square, checks)
-    #   if coordinates.has_key?('x') and coordinates.has_key?('y') and checks.has_key?('white_turn') and checks.has_key?('white_castling') and checks.has_key?('black_castling') and next_square.has_key?('x') and next_square.has_key?('y')
-    #     if checks[:white_turn] and !checks[:white_castling]
-    #       #FIXME Проект не запускается из-за этой строчки!
-    #       #return (Math.abs(coordinates[:x]-next_square[:x])==1 and(Math.abs(coordinates[:y]-next_square[:y])==2))or(Math.abs(coordinates[:x]-next_square[:x])==2 and ((Math.abs(coordinates[:y]-next_square[:y])==1)))
-    #     else
-    #
-    #     end
-    #   else
-    #   end
-    # end
+    def generate_moves(init_square, checks)
+      return @board.generate_angular(init_square)
+
+    end
   end
   class Bishop < Figure
     def initialize(white, board, moved=true)

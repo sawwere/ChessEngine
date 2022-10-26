@@ -186,12 +186,26 @@ module ChessEngine
     end
 
     def angle(x0, y0, dx, dy)
-      x_border = dx > 0 ? 8 - x0 : x0 - 1
-      y_border = dy > 0 ? 8 - y0 : y0 - 1
-      if (((dx > 0) and (x0 > x_border)) or ((dx < 0) and (x0 < x_border))) and
-        (((dy > 0) and (y0 > y_border)) or ((dy < 0) and (y0 < y_border))) and
-        @squares[y0+dy][x0+dx].get_occupied_by.white? != @squares[y0][x0].get_occupied_by.white?
+      res=Set.new
+      # x_border = dx > 0 ? 8 - x0 : x0 - 1
+      # y_border = dy > 0 ? 8 - y0 : y0 - 1
+      # if ((((dx > 0) and (x0 > x_border)) or ((dx < 0) and (x0 < x_border))) and
+      #   (((dy > 0) and (y0 > y_border)) or ((dy < 0) and (y0 < y_border))) and
+      #   @squares[y0+dy][x0+dx].get_occupied_by.white? != @squares[y0][x0].get_occupied_by.white?)
+      #   res.add(@squares[y0 + dy][x0 + dx])
+      # end
+
+      if (x0-dx>=0) and (x0-dx<=7) and (y0-dy>=0) and (y0-dy<=7)
+        if @squares[y0-dy][x0-dx].get_occupied_by.nil?
+          res.add(@squares[y0-dy][x0-dx])
+        else
+          if @squares[y0-dy][x0-dx].get_occupied_by.white? != @squares[y0][x0].get_occupied_by.white?
+            res.add(@squares[y0-dy][x0-dx])
+          end
+        end
+
       end
+      res
     end
 
     def generate_angular(square)
