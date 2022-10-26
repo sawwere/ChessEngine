@@ -13,14 +13,13 @@ module ChessEngine
                       PPPPPPPP
                       RNBQKBNR]
   class ChessBoard
-    def initialize(filename)
-      @white_turn=true
-      @white_castling=true
-      @black_castling=true
-      @last_turn=''
+    def initialize(filename, checks=nil)
+      #s = Square.new(Colors::WHITE, nil, nil)
+      #p s
+      @checks=checks
       create_board(BOARD_SIZE)
-      load_board(filename) unless filename.nil?
-      init_figures(START_POSITIONS) if filename.nil?
+      load_board(filename) unless filename.nil? or not File.file?(filename)
+      init_figures(START_POSITIONS) if filename.nil? or not File.file?(filename)
     end
     def string_to_bool(str)
       true if str=='true'
@@ -32,18 +31,19 @@ module ChessEngine
         lines=Array.new
         (0..BOARD_SIZE-1).each { lines.push(file.readline(chomp: true)) }
         init_figures(lines)
+        return if @checks.nil?
         lines=file.readlines(chomp: true)
         lines.each do |line|
           case line.split(' = ').first
           when 'white_turn'
             b=string_to_bool(line.split(' = ').last)
-            @white_turn=b unless b.nil?
+            @checks[:white_turn] = b unless b.nil?
           when 'white_castling'
             b=string_to_bool(line.split(' = ').last)
-            @white_castling=b unless b.nil?
+            @checks[:white_castling] = b unless b.nil?
           when 'black_castling'
             b=string_to_bool(line.split(' = ').last)
-            @black_castling=b unless b.nil?
+            @checks[:black_castling] = b unless b.nil?
           else
             # type code here
           end
@@ -62,10 +62,11 @@ module ChessEngine
           end
           file.write(line,"\n")
         end
-        file.write("white_turn = #{@white_turn.to_s}","\n")
-        file.write("white_castling = #{@white_castling.to_s}","\n")
-        file.write("black_castling = #{@black_castling.to_s}","\n")
-        file.write("last_turn = #{@last_turn.to_s}","\n")
+        return if @checks.nil?
+        file.write("white_turn = #{@checks[:white_turn].to_s}","\n") unless @checks[:white_turn]
+        file.write("white_castling = #{@checks[:white_castling].to_s}","\n") unless @checks[:white_castling]
+        file.write("black_castling = #{@checks[:black_castling].to_s}","\n") unless @checks[:black_castling]
+        file.write("last_turn = #{@checks[:last_turn].to_s}","\n") unless @checks[:last_turn].eql?('')
       end
     end
 
@@ -114,7 +115,7 @@ module ChessEngine
       res=Hash.new
       (0..BOARD_SIZE-1).each do |y|
         (0..BOARD_SIZE-1).each do |x|
-          res[[x,y]]=@squares[y][x].get_symbol unless positions[y][x].eql?(@squares[y][x].get_symbol)
+          res["#{('a'.ord+x).chr}#{8-y}"]=@squares[y][x].get_symbol unless positions[y][x].eql?(@squares[y][x].get_symbol)
         end
       end
       res
@@ -124,7 +125,7 @@ module ChessEngine
         row.each  do |sq|
           sq.print_square
         end
-        puts "| #{row_i+1}"
+        puts "| #{8-row_i}"
       end
       puts ' -  -  -  -  -  -  -  -  ',' a  b  c  d  e  f  g  h '
     end

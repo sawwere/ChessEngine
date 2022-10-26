@@ -11,10 +11,10 @@ module ChessEngine
   class  ChessMatch
     def initialize(filename)
       @filename = filename
-      @board = ChessBoard.new(filename)
-      @history = Array.new
       #TODO добавить необходимые флаги
       @checks = { white_turn: true, white_castling: true, black_castling: true, white_check: false , black_check: false }
+      @board = ChessBoard.new(filename,@checks)
+      @history = Array.new
       @whites = @board.get_figures(true )
       @blacks = @board.get_figures(false )
     end
@@ -33,6 +33,18 @@ module ChessEngine
 
         break
       end
+    end
+
+    def positions
+      @board.get_positions
+    end
+
+    def positions_difference(positions)
+      @board.get_positions_difference(positions)
+    end
+
+    def checks(check)
+      @checks[check]
     end
 
     def next(string)
@@ -118,8 +130,9 @@ module ChessEngine
     end
   end
 
-
-  game = ChessMatch.new('test_reading.txt')
-  game.start
+  #b=ChessBoard.new('test_reading.txt')
+  #b.print_board
+  game = ChessMatch.new(nil)
+  #game.start
 
 end

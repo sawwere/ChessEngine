@@ -1,6 +1,8 @@
 require 'square'
 
 module ChessEngine
+  #FIGURES_WHITE={'♙'=>'Pawn','♘'=>'Knight', '♖'=>'Rook','♕'=>'Queen','♔'=>'King','♗'=>'Bishop'}
+  #FIGURES_BLACK={'♟'=>'Pawn','♞'=>'Knight', '♜'=>'Rook','♛'=>'Queen','♚'=>'King','♝'=>'Bishop'}
   FIGURES={'p'=>'Pawn','n'=>'Knight', 'r'=>'Rook','q'=>'Queen','k'=>'King','b'=>'Bishop'}
   class Figure
     def initialize(white, board, moved=true)
