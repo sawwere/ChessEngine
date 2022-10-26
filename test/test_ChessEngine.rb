@@ -160,7 +160,7 @@ class TestPawn < Minitest::Test
   def test_move_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_pawns.txt')
     old_positions=game.positions
-    game.next('a3-b4')
+    game.next('a3-a2')
     assert_empty(game.positions_difference(old_positions))
   end
   def test_attack_incorrect_1
@@ -185,126 +185,126 @@ end
 class TestKnight < Minitest::Test
   def test_move1
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('f4-e6')
     old_positions=game.positions
+    game.next('f4-e6')
     assert_equal(game.positions_difference(old_positions),{'f4'=>'.','e6'=>'N'})
   end
   def test_move2
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('f4-h5')
     old_positions=game.positions
+    game.next('f4-h5')
     assert_equal(game.positions_difference(old_positions),{'f4'=>'.','h5'=>'N'})
   end
   def test_move3
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('f4-d3')
     old_positions=game.positions
+    game.next('f4-d3')
     assert_equal(game.positions_difference(old_positions),{'f4'=>'.','d3'=>'N'})
   end
   def test_move_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('f4-d4')
     old_positions=game.positions
+    game.next('f4-d4')
     assert_empty(game.positions_difference(old_positions))
   end
   def test_attack1
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('f4-d5')
     old_positions=game.positions
+    game.next('f4-d5')
     assert_equal(game.positions_difference(old_positions),{'f4'=>'.','d5'=>'N'})
   end
   def test_attack2
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('f4-g6')
     old_positions=game.positions
+    game.next('f4-g6')
     assert_equal(game.positions_difference(old_positions),{'f4'=>'.','g6'=>'N'})
   end
   def test_attack3
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('f4-e2')
     old_positions=game.positions
+    game.next('f4-e2')
     assert_equal(game.positions_difference(old_positions),{'f4'=>'.','e2'=>'N'})
   end
   def test_attack_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('f4-h3')
     old_positions=game.positions
+    game.next('f4-h3')
     assert_empty(game.positions_difference(old_positions))
   end
 end
 class TestBishop < Minitest::Test
   def test_move1
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('e5-b8')
     old_positions=game.positions
+    game.next('e5-b8')
     assert_equal(game.positions_difference(old_positions),{'e5'=>'.','b8'=>'B'})
   end
   def test_move2
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('e5-h8')
     old_positions=game.positions
+    game.next('e5-h8')
     assert_equal(game.positions_difference(old_positions),{'e5'=>'.','h8'=>'B'})
   end
   def test_move_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('e5-f5')
     old_positions=game.positions
+    game.next('e5-f5')
     assert_empty(game.positions_difference(old_positions))
   end
   def test_move_through_piece
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('e5-g3')
     old_positions=game.positions
+    game.next('e5-g3')
     assert_empty(game.positions_difference(old_positions))
   end
   def test_attack
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('e5-c3')
     old_positions=game.positions
+    game.next('e5-c3')
     assert_equal(game.positions_difference(old_positions),{'e5'=>'.','c3'=>'B'})
   end
   def test_attack_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('e5-f4')
     old_positions=game.positions
+    game.next('e5-f4')
     assert_empty(game.positions_difference(old_positions))
   end
 end
 class TestQueen < Minitest::Test
   def test_move1
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('d1-b1')
     old_positions=game.positions
+    game.next('d1-b1')
     assert_equal(game.positions_difference(old_positions),{'d1'=>'.','b1'=>'Q'})
   end
   def test_move2
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('d1-b3')
     old_positions=game.positions
+    game.next('d1-b3')
     assert_equal(game.positions_difference(old_positions),{'d1'=>'.','b3'=>'Q'})
   end
   def test_move_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('d1-a2')
     old_positions=game.positions
+    game.next('d1-a2')
     assert_empty(game.positions_difference(old_positions))
   end
   def test_move_through_piece
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('d1-f3')
     old_positions=game.positions
+    game.next('d1-f3')
     assert_empty(game.positions_difference(old_positions))
   end
   def test_attack
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('d1-a4')
     old_positions=game.positions
+    game.next('d1-a4')
     assert_equal(game.positions_difference(old_positions),{'d1'=>'.','a4'=>'Q'})
   end
   def test_attack_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('d1-d2')
     old_positions=game.positions
+    game.next('d1-d2')
     assert_empty(game.positions_difference(old_positions))
   end
 end
@@ -335,9 +335,9 @@ class TestRook < Minitest::Test
   end
   def test_attack_incorrect
     game = ChessEngine::ChessMatch.new('test/boards/test_moves.txt')
-    game.next('a1-d1')
     old_positions=game.positions
-    assert_equal(game.positions_difference(old_positions),{'h3'=>'.','c3'=>'R'})
+    game.next('a1-d1')
+    assert_empty(game.positions_difference(old_positions))
   end
 end
 class TestKing < Minitest::Test

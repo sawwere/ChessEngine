@@ -15,6 +15,7 @@ module ChessEngine
   class ChessBoard
     def initialize(filename, checks=nil)
       @checks=checks
+      @passent_squares=Set.new
       create_board(BOARD_SIZE)
       load_board(filename) unless filename.nil? or not File.file?(filename)
       init_figures(START_POSITIONS) if filename.nil? or not File.file?(filename)
@@ -228,7 +229,7 @@ module ChessEngine
       if x>=0 and x<BOARD_SIZE and y>=0 and y<BOARD_SIZE
         return  @squares[y][x]
       end
-      raise IndexError
+      nil
     end
 
     def get_king(color)
@@ -299,15 +300,22 @@ module ChessEngine
       false
     end
 
+    def set_passent_squares(squares)
+      @passent_squares=squares
+    end
     # Move piece from square_from to square_to
     def make_turn(square_from, square_to)
       to = square_to.get_coordinates
       from = square_from.get_coordinates
       @squares[to[:y]][to[:x]].set_occupied_by(square_from.get_occupied_by.dup )
       @squares[from[:y]][from[:x]].set_occupied_by(nil)
+      @checks[:last_turn]=[from,to]
     end
 
     private def make_turn_back(square_from, square_to, from_fig, to_fig)
+      if @passent_squares.include?(square_to)
+        #TODO
+      end
       to = square_to.get_coordinates
       from = square_from.get_coordinates
       @squares[to[:y]][to[:x]].set_occupied_by(to_fig )
