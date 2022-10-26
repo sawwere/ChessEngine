@@ -26,6 +26,8 @@ module ChessEngine
           break
         elsif input == '/print'
           execute_print_board
+        elsif input == '/history'
+          execute_print_history
           else
         self.next(input)
         end
@@ -74,8 +76,14 @@ module ChessEngine
           #TODO Добавить трансофрмирование фигуры
           p 'transform done'
         else
-          puts execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
-          p 'quiet_move is done'
+          legal_move=execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
+          if legal_move
+            puts legal_move
+            p 'quiet_move is done'
+            @history.append(move)
+          else
+            puts legal_move
+          end
         end
       else
         p 'Неправильно введён ход, попробуйте ещё раз'
@@ -103,6 +111,7 @@ module ChessEngine
       @board.make_turn(square_from, square_to)
       @checks[:white_turn] = !@checks[:white_turn]
       @board.mate_or_draw?(@checks[:white_turn], @checks)
+      #@history.append({from:square_from, to: square_to})
       true
     end
 
@@ -111,7 +120,7 @@ module ChessEngine
     end
 
     private def execute_print_history
-      @board.print_board
+      @history.each_index  {|x| puts (x+1).to_s+" "+@history[x]}
     end
 
     private def execute_save(filename)
@@ -120,7 +129,7 @@ module ChessEngine
     end
   end
 
-  game = ChessEngine::ChessMatch.new(nil )
-  game.start
+   game = ChessEngine::ChessMatch.new(nil )
+   game.start
 
 end
