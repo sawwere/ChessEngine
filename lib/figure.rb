@@ -118,13 +118,30 @@ module ChessEngine
       x = init_square.get_coordinates[:x]
       y = init_square.get_coordinates[:y]
 
-      #Default attack
+      p_squares=Set.new
+
+      #Attack
       sq = @board[x-1,y-dir_y]
       #Passent
-      moves.add(sq) if (not sq.nil?) and (not sq.get_occupied_by.nil?) and (not sq.get_occupied_by.white?.eql?(white?))
+      passent=false
+      #if checks[:last_turn][:to]==@board[x-1,y] and (not @board[x-1,y].nil?) and (not @board[x-1,y].get_occupied_by.nil?) and (FIGURES[@board[x-1,y].get_occupied_by.to_s.downcase]='Pawn')
+      #  if (not @board[x-1,y].get_occupied_by.white?.eql?(@white)) and (checks[:last_turn][:from].get_coordinates[:y]-@board[x-1,y].get_coordinates[:y]).abs==2
+      #    passent = true
+      #    p_squares.add({attack:@board[x-1,y],move:sq})
+      #  end
+      #end
+      moves.add(sq) if passent or ((not sq.nil?) and (not sq.get_occupied_by.nil?) and (not sq.get_occupied_by.white?.eql?(white?)))
       sq = @board[x+1,y-dir_y]
       #Passent
-      moves.add(sq) if (not sq.nil?) and (not sq.get_occupied_by.nil?) and (not sq.get_occupied_by.white?.eql?(white?))
+      passent=false
+      #if checks[:last_turn][:to]==@board[x+1,y] and (not @board[x+1,y].nil?) and (not @board[x+1,y].get_occupied_by.nil?) and (FIGURES[@board[x+1,y].get_occupied_by.to_s.downcase]='Pawn')
+      #  if (not @board[x+1,y].get_occupied_by.white?.eql?(@white)) and (checks[:last_turn][:from].get_coordinates[:y]-@board[x-1,y].get_coordinates[:y]).abs==2
+      #    passent = true
+      #    p_squares.add({attack:@board[x+1,y],move:sq})
+      #  end
+      #end
+      @board.set_passent_squares(p_squares)
+      moves.add(sq) if passent or ((not sq.nil?) and (not sq.get_occupied_by.nil?) and (not sq.get_occupied_by.white?.eql?(white?)))
 
       #Default move
       sq = @board[x,y-dir_y]

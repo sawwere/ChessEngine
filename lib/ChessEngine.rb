@@ -12,7 +12,7 @@ module ChessEngine
     def initialize(filename)
       @filename = filename
       #TODO добавить необходимые флаги
-      @checks = { white_turn: true, white_castling: true, black_castling: true, draw: false , win: false }
+      @checks = { white_turn: true, white_castling: true, black_castling: true, draw: false , win: false, last_turn:{from:nil,to:nil} }
       @board = ChessBoard.new(filename,@checks)
       @history = Array.new
       @board.mate_or_draw?(@checks[:white_turn], @checks)
@@ -123,6 +123,9 @@ module ChessEngine
         return false
       end
       @board.make_turn(square_from, square_to)
+      @board.passent(square_to)
+      @checks[:last_turn][:from]=square_from
+      @checks[:last_turn][:to]=square_to
       @checks[:white_turn] = !@checks[:white_turn]
       @board.mate_or_draw?(@checks[:white_turn], @checks)
       #@history.append({from:square_from, to: square_to})

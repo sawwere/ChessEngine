@@ -65,7 +65,7 @@ module ChessEngine
         file.write("white_turn = #{@checks[:white_turn].to_s}","\n") unless @checks[:white_turn]
         file.write("white_castling = #{@checks[:white_castling].to_s}","\n") unless @checks[:white_castling]
         file.write("black_castling = #{@checks[:black_castling].to_s}","\n") unless @checks[:black_castling]
-        file.write("last_turn = #{@checks[:last_turn].to_s}","\n") unless @checks[:last_turn].eql?('')
+        #file.write("last_turn = #{@checks[:last_turn].to_s}","\n") unless @checks[:last_turn].eql?('')
       end
     end
 
@@ -303,19 +303,23 @@ module ChessEngine
     def set_passent_squares(squares)
       @passent_squares=squares
     end
+    def get_passent_squares
+      @passent_squares
+    end
+    def passent(square_to)
+      unless @passent_squares.empty?
+        @passent_squares.each { |square| square[:attack].set_occupied_by(nil) if square[:move]==square_to }
+      end
+    end
     # Move piece from square_from to square_to
     def make_turn(square_from, square_to)
       to = square_to.get_coordinates
       from = square_from.get_coordinates
       @squares[to[:y]][to[:x]].set_occupied_by(square_from.get_occupied_by.dup )
       @squares[from[:y]][from[:x]].set_occupied_by(nil)
-      @checks[:last_turn]=[from,to]
     end
 
     def make_turn_back(square_from, square_to, from_fig, to_fig)
-      if @passent_squares.include?(square_to)
-        #TODO
-      end
       to = square_to.get_coordinates
       from = square_from.get_coordinates
       @squares[to[:y]][to[:x]].set_occupied_by(to_fig )
