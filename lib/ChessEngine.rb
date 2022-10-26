@@ -49,6 +49,7 @@ module ChessEngine
 
     def next(move)
       horizontal = 'abcdefgh'
+      figures = 'RBQN'
       is_transform = false
       if move == nil or move == ''
         p 'Неправильно введён ход, попробуйте ещё раз'
@@ -63,7 +64,7 @@ module ChessEngine
           p 'Неправильно введён ход, попробуйте ещё раз'
           return false
         end
-        if to_cell.length == 3 and to_cell[2] == to_cell[2].upcase
+        if to_cell.length == 3 and figures.index(to_cell[2])!= nil
           is_transform = true
           transform_to = to_cell[2]
           to_cell = to_cell[0,2]
