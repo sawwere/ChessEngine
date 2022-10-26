@@ -31,7 +31,6 @@ module ChessEngine
         self.next(input)
         end
 
-        break
       end
     end
 
@@ -110,10 +109,14 @@ module ChessEngine
     end
 
     private def execute_move(square_from, square_to)
-      if @board.mate_or_draw?(@checks)
+      if @board.mate_or_draw?(@checks) or
+        @board.check?(square_from, square_to, @checks) or
+        !@board.valid_square?(square_from, @checks[:white_turn])
         return false
       end
-      !@board.check?(square_from, square_to, @checks)
+      @board.make_turn(square_from, square_to)
+      @checks[:white_turn] = !@checks[:white_turn]
+      true
     end
 
     private def execute_print_board
@@ -133,6 +136,6 @@ module ChessEngine
   #b=ChessBoard.new('test_reading.txt')
   #b.print_board
   game = ChessMatch.new(nil)
-  #game.start
+  game.start
 
 end

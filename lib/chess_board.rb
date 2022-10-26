@@ -166,15 +166,12 @@ module ChessEngine
 
     # Return set of squares which can be accessed from the square vertically within distance
     def generate_vertical_up(square, distance)
-      res = Set.new
       x0 = square.get_coordinates[:x]
       y0 = square.get_coordinates[:y]
-      res = get_accessible_squares(1, 0, x0, y0, distance)
-      res
+      get_accessible_squares(1, 0, x0, y0, distance)
     end
 
     def generate_vertical_down(square, distance)
-      res = Set.new
       x0 = square.get_coordinates[:x]
       y0 = square.get_coordinates[:y]
       get_accessible_squares(-1, 0, x0, y0, distance)
@@ -215,17 +212,6 @@ module ChessEngine
       res
     end
 
-    def get_figures(color)
-      res=Set.new
-      @squares.each_with_index  do |row,row_i|
-        row.each_index  do |col_i|
-          fg=@squares[row_i][col_i].get_occupied_by
-          res.add(fg) if not fg.nil? and fg.white? == color
-        end
-      end
-      res
-    end
-
     def [](x, y)
       if x>=0 and x<BOARD_SIZE and y>=0 and y<BOARD_SIZE
         return  @squares[y][x]
@@ -246,6 +232,26 @@ module ChessEngine
     #Возвращает все возможные ходы всех фигур цвета color
     def get_all_moves(color, checks)
       res = Set.new
+      figs_f = Set.new
+      @squares.each_with_index  do |row,row_i|
+        row.each_index  do |col_i|
+          fg=@squares[row_i][col_i].get_occupied_by
+          figs_f.add(@squares[row_i][col_i]) if not fg.nil? and fg.white? == color
+        end
+      end
+      figs_f.each  do |sq|
+        potential = sq.get_occupied_by.generate_moves(sq, checks)
+        potential.each do |pp|
+          unless check?(sq, pp, checks)
+            res = res.add(sq)
+          end
+        end
+      end
+      res
+    end
+
+    private def brave_attack(color, checks)
+      res = Set.new
       @squares.each  do |row|
         row.each  do |sq|
           if !sq.get_occupied_by.nil? and sq.get_occupied_by.white? == color
@@ -253,15 +259,20 @@ module ChessEngine
           end
         end
       end
-      res
+      return res
     end
 
     def king_under_attack?(color, checks)
       king_square = get_king(checks[:white_turn])
-      enemy_attack = get_all_moves(!checks[:white_turn], checks)
+      enemy_attack = brave_attack(!checks[:white_turn], checks)
       enemy_attack.include?(king_square)
     end
 
+    def valid_square?(square_from, color)
+      !square_from.get_occupied_by.nil? and square_from.get_occupied_by.white? == color
+    end
+
+    #
     def mate_or_draw?(checks)
       if get_all_moves(checks[:white_turn], checks).size == 0
         if checks[:white_turn]
@@ -274,28 +285,36 @@ module ChessEngine
       false
     end
 
+    # Move piece from square_from to square_to
+    def make_turn(square_from, square_to)
+      to = square_to.get_coordinates
+      from = square_from.get_coordinates
+      @squares[to[:y]][to[:x]].set_occupied_by(square_from.get_occupied_by.dup )
+      @squares[from[:y]][from[:x]].set_occupied_by(nil)
+    end
+
+    private def make_turn_back(square_from, square_to, from_fig, to_fig)
+      to = square_to.get_coordinates
+      from = square_from.get_coordinates
+      @squares[to[:y]][to[:x]].set_occupied_by(to_fig )
+      @squares[from[:y]][from[:x]].set_occupied_by(from_fig)
+    end
+
+    # Will moving from square_from to square_to lead to check
     def check?(square_from, square_to, checks)
       possible_moves = square_from.get_occupied_by.generate_moves(square_from, checks)
       if possible_moves.include?(square_to)
         from_fig = square_from.get_occupied_by.dup
-        to_fig = square_from.get_occupied_by.dup
-
-        to = square_to.get_coordinates
-        @squares[to[:y]][to[:x]].set_occupied_by(from_fig )
-        from = square_from.get_coordinates
-        @squares[from[:y]][from[:x]].set_occupied_by(nil)
-
+        to_fig = square_to.get_occupied_by.dup
+        make_turn(square_from, square_to)
         if king_under_attack?(checks[:white_turn], checks)
-          @squares[to[:y]][to[:x]].set_occupied_by(to_fig )
-          @squares[from[:y]][from[:x]].set_occupied_by(from_fig)
-          puts "Король под ударом"
+          make_turn_back(square_from, square_to, from_fig, to_fig)
           return true
         end
+        make_turn_back(square_from, square_to, from_fig, to_fig)
         return false
       end
-      puts "Нет доступных ходов для этой фигуры"
-      true
     end
-
+    true
   end
 end
