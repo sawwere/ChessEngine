@@ -45,31 +45,34 @@ module ChessEngine
       @checks[check]
     end
 
-    def next(string)
+    def next(move)
       horizontal = 'abcdefgh'
-      #current_move = string.split('.').first
-      move = string.split('.').last
-      if  move == '0-0-0' or move == '0-0'
+      is_transform = false
+      if move == nil or move == ''
+        p 'Неправильно введён ход, попробуйте ещё раз'
+        return false
+      elsif  move == '0-0-0' or move == '0-0'
         #TODO Добавить рокировку
         p 'castling is done'
       elsif move.include? '-'
         is_quiet_move = true
         from_cell,to_cell = split_move(move,'-')
+        if to_cell.length == 3 and to_cell[2] == to_cell[2].upcase
+          is_transform = true
+          transform_to = to_cell[2]
+          to_cell = to_cell[0,2]
+        end
         if check_input(from_cell,to_cell,horizontal)
           p 'Неправильно введён ход, попробуйте ещё раз'
           return false
         end
-        puts execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
-        p 'quiet_move is done'
-      elsif move.include? 'x'
-        is_quiet_move = false
-        from_cell,to_cell = split_move(move,'x')
-        if check_input(from_cell,to_cell,horizontal)
-          p 'Неправильно введён ход, попробуйте ещё раз'
-          return false
+        if is_transform
+          #TODO Добавить трансофрмирование фигуры
+          p 'transform done'
+        else
+          puts execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
+          p 'quiet_move is done'
         end
-        puts execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
-        p 'not quiet_move is done'
       else
         p 'Неправильно введён ход, попробуйте ещё раз'
         return false
@@ -87,10 +90,10 @@ module ChessEngine
     end
 
     private def execute_move(square_from, square_to)
-      if @board.mate_or_draw?(@checks[:white_turn], @checks) or
+      if !@board.valid_square?(square_from, @checks[:white_turn]) or
+        @board.mate_or_draw?(@checks[:white_turn], @checks) or
         !square_from.get_occupied_by.generate_moves(square_from, @checks).include?(square_to) or
-        @board.check?(square_from, square_to, @checks) or
-        !@board.valid_square?(square_from, @checks[:white_turn])
+        @board.check?(square_from, square_to, @checks)
         return false
       end
       @board.make_turn(square_from, square_to)
@@ -113,7 +116,7 @@ module ChessEngine
     end
   end
 
-  game = ChessEngine::ChessMatch.new(nil )
-  game.start
+  #game = ChessEngine::ChessMatch.new(nil )
+  #game.start
 
 end
