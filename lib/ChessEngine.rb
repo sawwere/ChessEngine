@@ -15,8 +15,6 @@ module ChessEngine
       @history = Array.new
       #TODO добавить необходимые флаги
       @checks = { white_turn: true, white_castling: true, black_castling: true, white_check: false , black_check: false }
-      @whites = @board.get_figures(true )
-      @blacks = @board.get_figures(false )
     end
 
     def start
@@ -31,7 +29,6 @@ module ChessEngine
         self.next(input)
         end
 
-        break
       end
     end
 
@@ -64,7 +61,7 @@ module ChessEngine
         p 'Неправильно введён ход, попробуйте ещё раз'
         return false
       end
-      #TODO НЕ УДАЛЯТЬ ПОКА НЕТ ТЕСТОВ
+      # #TODO НЕ УДАЛЯТЬ ПОКА НЕТ ТЕСТОВ
       #
       # puts execute_move(@board[4, 6], @board[4, 5])
       # @checks[:white_turn] = !@checks[:white_turn]
@@ -98,10 +95,14 @@ module ChessEngine
     end
 
     private def execute_move(square_from, square_to)
-      if @board.mate_or_draw?(@checks)
+      if @board.mate_or_draw?(@checks) or
+        @board.check?(square_from, square_to, @checks) or
+        !@board.valid_square?(square_from, @checks[:white_turn])
         return false
       end
-      !@board.check?(square_from, square_to, @checks)
+      @board.make_turn(square_from, square_to)
+      @checks[:white_turn] = !@checks[:white_turn]
+      true
     end
 
     private def execute_print_board
