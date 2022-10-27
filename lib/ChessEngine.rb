@@ -210,7 +210,7 @@ module ChessEngine
     end
   end
 
-  game = ChessEngine::ChessMatch.new(nil )
-  game.start
+  #game = ChessEngine::ChessMatch.new(nil )
+  #game.start
 
 end
