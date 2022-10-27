@@ -15,7 +15,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-для начала игры нужно создать объект класса СhessMatch, и вызвать для него start. 
+для начала игры нужно вызвать start_game. 
 Далее идет последовательное считывание команд из консоли. Команды вводятся в формате "e2-e4"
 Существуют специальные команды:
 /print - для печати доски
