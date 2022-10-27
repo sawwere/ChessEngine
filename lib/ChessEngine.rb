@@ -8,6 +8,11 @@ require 'chess_board'
 module ChessEngine
   class Error < StandardError; end
 
+  def self.start_game
+    game = ChessEngine::ChessMatch.new(nil )
+    game.start
+  end
+
   class  ChessMatch
     def initialize(filename)
       @filename = filename
@@ -210,7 +215,9 @@ module ChessEngine
     end
   end
 
-  #game = ChessEngine::ChessMatch.new(nil )
-  #game.start
+  # ChessEngine::ChessMatch.new(nil).start()
+  # ChessEngine.start_game
 
 end
+
+
