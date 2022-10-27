@@ -1,8 +1,7 @@
 # ChessEngine
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ChessEngine`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Это Гем для моделирования игры в шахматы между двумя людьми, не позволяющий сделать неверный ход.
+В разработке проекта участвовали Дмитрий Пономарев, Олег Терещенко, Виктор Чумаков, Анастасия Шагалова, Алексей Щербак
 
 ## Installation
 
@@ -16,7 +15,12 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-TODO: Write usage instructions here
+для начала игры нужно создать объект класса СhessMatch, и вызвать для него start. 
+Далее идет последовательное считывание команд из консоли. Команды вводятся в формате "e2-e4"
+Существуют специальные команды:
+/print - для печати доски
+/history - для вывода истории ходов
+/exit - для выхода из программы
 
 ## Development
 
