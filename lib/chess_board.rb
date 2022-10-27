@@ -292,7 +292,7 @@ module ChessEngine
           checks[:draw] = true
           puts "Ничья"
         else
-          puts "Мат" + (checks[:white_turn] ? "белым" : "черным")
+          puts "Мат" + (checks[:white_turn] ? " белым" : " черным")
           checks[:win] = true
         end
         return true

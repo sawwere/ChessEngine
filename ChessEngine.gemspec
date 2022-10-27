@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["sawer_13@mail.ru"]
 
   spec.summary = "ChessEngine project"
-  spec.description = "description ChessEngine project"
+  spec.description = " ChessEngine is a Ruby Gem for playing chess by two people"
   spec.homepage = "https://github.com/sawwere/ChessEngine"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"

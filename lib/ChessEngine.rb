@@ -19,7 +19,7 @@ module ChessEngine
 
     def start
       while true
-        puts 'пожалуйста введите ход'
+        puts 'пожалуйста, введите ход'
         input = gets.chomp
         if input == '/exit'
           break
@@ -80,10 +80,11 @@ module ChessEngine
         else
           legal_move=execute_move(@board[horizontal.index(from_cell[0]), 8-from_cell[1].to_i], @board[horizontal.index(to_cell[0]), 8-to_cell[1].to_i])
           if legal_move
-            puts legal_move
+            #puts legal_move
             @history.append(move)
           else
-            puts legal_move
+            #puts legal_move
+            puts "Указаны неверные клетки, повторите ход"
           end
         end
       else
@@ -206,11 +207,10 @@ module ChessEngine
 
     private def execute_save(filename)
       @board.save_board(filename)
-      #TODO сохранить историю ходов
     end
   end
 
-  #game = ChessEngine::ChessMatch.new(nil )
-  #game.start
+  game = ChessEngine::ChessMatch.new(nil )
+  game.start
 
 end
